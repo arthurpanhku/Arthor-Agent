@@ -36,6 +36,16 @@ class Remediation(BaseModel):
     related_gap_ids: list[str] = Field(default_factory=list)
 
 
+class SourceCitation(BaseModel):
+    id: str
+    file: str
+    page: int | None = None
+    paragraph_id: str | None = None
+    excerpt: str
+    evidence_link: str | None = None
+    score: float | None = None
+
+
 class ReportMetadata(BaseModel):
     scenario_id: str | None = None
     project_id: str | None = None
@@ -51,6 +61,8 @@ class AssessmentReport(BaseModel):
     risk_items: list[RiskItem] = Field(default_factory=list)
     compliance_gaps: list[ComplianceGap] = Field(default_factory=list)
     remediations: list[Remediation] = Field(default_factory=list)
+    confidence: float = Field(default=0.0, ge=0.0, le=1.0)
+    sources: list[SourceCitation] = Field(default_factory=list)
     metadata: ReportMetadata | None = None
     format: Literal["json", "markdown"] = "json"
 
@@ -63,8 +75,20 @@ class AssessmentTaskCreated(BaseModel):
 
 class AssessmentTaskResult(BaseModel):
     task_id: UUID
-    status: Literal["pending", "running", "completed", "failed"]
+    status: Literal[
+        "pending",
+        "running",
+        "review_pending",
+        "approved",
+        "rejected",
+        "escalated",
+        "completed",
+        "failed",
+    ]
     report: AssessmentReport | None = None
     error_message: str | None = None
     created_at: datetime
     completed_at: datetime | None = None
+    version: int = 1
+    assignee: str | None = None
+    comments: list[dict] = Field(default_factory=list)

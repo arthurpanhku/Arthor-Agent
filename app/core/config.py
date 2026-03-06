@@ -39,6 +39,8 @@ class Settings(BaseSettings):
     VECTOR_STORE_TYPE: Literal["chroma"] = "chroma"
     CHROMA_PERSIST_DIR: str = "./data/chroma"
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
+    KB_AUTO_SYNC_DIR: str = "./examples"
+    KB_AUTO_SYNC_INTERVAL_SECONDS: int = 0
 
     @property
     def upload_max_bytes(self) -> int:

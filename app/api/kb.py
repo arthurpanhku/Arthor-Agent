@@ -14,6 +14,10 @@ class KBQueryRequest(BaseModel):
     top_k: int = 5
 
 
+class KBReindexRequest(BaseModel):
+    directory: str
+
+
 @router.post("/documents")
 async def upload_document(file: UploadFile = File(...)):  # noqa: B008
     """Upload a document to the knowledge base."""
@@ -39,3 +43,9 @@ async def query_kb(body: KBQueryRequest):
     return {
         "chunks": [{"content": d.page_content, "metadata": d.metadata} for d in docs]
     }
+
+
+@router.post("/reindex")
+async def reindex_kb(body: KBReindexRequest):
+    kb = KnowledgeBaseService()
+    return kb.reindex_directory(body.directory)

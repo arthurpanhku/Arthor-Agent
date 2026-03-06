@@ -11,7 +11,9 @@ if "api_url" not in st.session_state:
 
 client = ApiClient(st.session_state.api_url)
 
-tab1, tab2 = st.tabs(["📤 Upload Documents", "🔍 Query / Test"])
+tab1, tab2, tab3 = st.tabs(
+    ["📤 Upload Documents", "🔍 Query / Test", "🔄 Auto Reindex"]
+)
 
 with tab1:
     st.subheader("Add New Documents")
@@ -31,10 +33,8 @@ with tab1:
             with st.spinner("Processing and indexing document..."):
                 res = client.upload_to_kb(kb_file, c_size, c_overlap)
                 if res:
-                    st.success(f"Successfully indexed: {res.get('filename')}")
-                    st.info(
-                        f"Generated {res.get('chunks_count')} chunks in vector store."
-                    )
+                    st.success("Successfully indexed document.")
+                    st.info(f"Document ID: {res.get('document_id')}")
         else:
             st.warning("Please select a file.")
 
@@ -47,18 +47,32 @@ with tab2:
         if query:
             with st.spinner("Searching..."):
                 res = client.query_kb(query, top_k)
-                if res and "results" in res:
-                    st.markdown(f"Found **{len(res['results'])}** relevant snippets.")
-                    for i, r in enumerate(res["results"]):
+                if res and "chunks" in res:
+                    st.markdown(f"Found **{len(res['chunks'])}** relevant snippets.")
+                    for i, r in enumerate(res["chunks"]):
                         with st.expander(
-                            f"Result {i + 1} (Score: {r.get('score', 'N/A'):.4f})"
+                            "Result "
+                            f"{i + 1} "
+                            f"(Score: {r.get('metadata', {}).get('score', 'N/A')})"
                         ):
                             st.write(r.get("content"))
                             st.caption(
-                                f"Source: {r.get('metadata', {}).get('filename')} | "
+                                f"Source: {r.get('metadata', {}).get('source')} | "
                                 f"Page: {r.get('metadata', {}).get('page', 'N/A')}"
                             )
                 else:
                     st.write("No results found.")
         else:
             st.warning("Please enter a query.")
+
+with tab3:
+    st.subheader("Reindex Local Policy Directory")
+    directory = st.text_input("Directory path", value="./examples")
+    if st.button("Run Reindex", type="primary"):
+        with st.spinner("Reindexing..."):
+            res = client.reindex_kb(directory)
+            if res:
+                st.success(f"Indexed {res.get('indexed', 0)} files.")
+                if res.get("errors"):
+                    st.warning("Some files failed during indexing.")
+                    st.json(res.get("errors"))

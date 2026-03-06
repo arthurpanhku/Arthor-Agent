@@ -5,6 +5,7 @@ from .assessment import (
     ComplianceGap,
     Remediation,
     RiskItem,
+    SourceCitation,
 )
 from .parser import ParsedDocument
 
@@ -16,4 +17,5 @@ __all__ = [
     "ParsedDocument",
     "Remediation",
     "RiskItem",
+    "SourceCitation",
 ]
