@@ -1,5 +1,8 @@
 # Arthor Agent — Dependencies
-# Python 3.10+
+# Python 3.9+ (3.10+ recommended for best ecosystem compatibility)
+
+# NumPy: pin <2 for compatibility with torch/sentence-transformers on Python 3.9
+numpy<2
 
 # Web & API
 fastapi>=0.109.0
