@@ -130,7 +130,7 @@
             class="border-2 border-dashed border-gray-600 rounded-xl p-12 bg-dark-surface/50 hover:bg-dark-surface hover:border-primary transition-all cursor-pointer group relative overflow-hidden"
             @dragover.prevent="dragOver = true" @dragleave.prevent="dragOver = false" @drop.prevent="handleDrop"
             @click="$refs.fileInput.click()" :class="{'border-primary bg-primary/5': dragOver}">
-            <input type="file" ref="fileInput" class="hidden" @change="handleFileSelect"
+            <input type="file" ref="fileInput" class="hidden" @change="handleFileSelect" multiple
               accept=".txt,.md,.pdf,.docx,.xlsx,.pptx">
 
             <div class="relative z-10 flex flex-col items-center">
@@ -162,8 +162,8 @@
             <i data-lucide="file-search" class="absolute inset-0 m-auto w-8 h-8 text-white animate-pulse"></i>
           </div>
           <h3 class="text-2xl font-bold text-white mb-2">Analyzing Document</h3>
-          <p class="text-gray-400 max-w-md text-center">Our AI agent is reading your document, checking against security
-            policies, and identifying risks...</p>
+          <p class="text-gray-400 max-w-md text-center">{{ progressText || 'Our AI agent is reading your document,
+            checking against security policies, and identifying risks...' }}</p>
           <div class="mt-8 w-64 h-1.5 bg-gray-800 rounded-full overflow-hidden">
             <div class="h-full bg-primary animate-progress origin-left"></div>
           </div>
@@ -347,6 +347,7 @@
         const scenarioId = ref('default');
         const showConfig = ref(false);
         const loading = ref(false);
+        const progressText = ref('');
         const error = ref(null);
         const report = ref(null);
         const dragOver = ref(false);
@@ -362,27 +363,32 @@
 
         const handleFileSelect = (e) => {
           const files = e.target.files;
-          if (files.length) processFile(files[0]);
+          if (files.length) processFiles(files);
         };
 
         const handleDrop = (e) => {
           dragOver.value = false;
           const files = e.dataTransfer.files;
-          if (files.length) processFile(files[0]);
+          if (files.length) processFiles(files);
         };
 
-        const processFile = async (file) => {
+        const processFiles = async (files) => {
           loading.value = true;
           error.value = null;
           report.value = null;
+          progressText.value = 'Initializing upload...';
 
           const api = baseUrl.value.replace(/\/$/, '') + '/api/v1';
 
           try {
             // 1. Upload
             const fd = new FormData();
-            fd.append('files', file);
+            for (let i = 0; i < files.length; i++) {
+              fd.append('files', files[i]);
+            }
             fd.append('scenario_id', scenarioId.value);
+
+            progressText.value = `Uploading ${files.length} file(s)...`;
 
             const uploadRes = await fetch(api + '/assessments', {
               method: 'POST',
@@ -413,6 +419,13 @@
               if (!res.ok) throw new Error(`Status check failed: ${res.statusText}`);
 
               const data = await res.json();
+
+              // Update progress based on status if possible
+              if (data.status === 'processing') {
+                progressText.value = 'Analyzing document content...';
+              } else if (data.status === 'pending') {
+                progressText.value = 'Queued for assessment...';
+              }
 
               // Check if status is completed or report content is available
               if (data.status === 'completed' || (data.report && data.report.summary) || data.summary) {
@@ -496,6 +509,7 @@
           baseUrl,
           scenarioId,
           showConfig,
+          progressText,
           loading,
           error,
           report,

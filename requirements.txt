@@ -34,3 +34,8 @@ httpx>=0.26.0
 # Utils
 python-multipart>=0.0.6
 python-dotenv>=1.0.0
+
+# Frontend
+streamlit>=1.30.0
+plotly>=5.18.0
+pandas>=2.0.0
