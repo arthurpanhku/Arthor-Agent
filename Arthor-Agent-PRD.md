@@ -198,6 +198,40 @@ Build a **dedicated AI Agent for security teams**, with the primary focus on **a
 
 The system uses a layered design: **Access** (REST API / Web / CLI) → **Core** (Orchestrator, Memory, Skills, Knowledge Base RAG, Parser) → **LLM abstraction** → **Cloud/local LLMs**. Optional integrations: **AAD** (identity/SSO) and **ServiceNow** (project metadata). For component details, Mermaid diagrams, data flow, integration view, security architecture, and deployment view, see **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
 
+#### 架构图 | Architecture Diagram
+
+```
+                    ┌─────────────────────────────────────────────────────────┐
+                    │           用户 / 安全人员 | User / Security Staff         │
+                    └───────────────────────────┬─────────────────────────────┘
+                                                │
+                    ┌───────────────────────────▼─────────────────────────────┐
+                    │                接入层 | Access Layer (API / Web / CLI)   │
+                    └───────────────────────────┬─────────────────────────────┘
+                                                │
+    ┌───────────────────────────────────────────▼───────────────────────────────────────────┐
+    │                         Arthor Agent 核心 | Core                                        │
+    │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  │
+    │  │  任务编排    │  │  记忆体     │  │  Skill 层   │  │  知识库     │  │  文件解析   │  │
+    │  │  (Orchestr.) │  │  (Memory)   │  │  (Skills)   │  │  (RAG/KB)   │  │  (Parser)   │  │
+    │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └─────┬───────┘  │
+    │         │                │                │                │                │          │
+    │         └────────────────┴────────────────┴────────────────┴────────────────┘          │
+    │                                          │                                               │
+    │                              ┌───────────▼───────────┐                                  │
+    │                              │  LLM 抽象层 | LLM Abstraction                            │
+    │                              └───────────┬───────────┘                                  │
+    └──────────────────────────────────────────┼──────────────────────────────────────────────┘
+                                               │
+        ┌─────────────────────────────────────┼─────────────────────────────────────┐
+        │  商用/云端 LLM | Commercial/Cloud     │    本地/私有化 LLM | Local/On-prem   │
+        │  ChatGPT / Claude / Qwen / Gemini    │    Ollama / vLLM / ...               │
+        └─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**中文**：接入层与核心之外，系统可对接 **AAD**（身份/登录与 API Token 校验）与 **项目管理平台**（如 ServiceNow，读取项目元数据；可选回写评估结果）。  
+**English**: Beyond the access and core layers, the system can integrate with **AAD** (identity/login and API token validation) and **project management platforms** (e.g. ServiceNow for project metadata; optional write-back of assessment results).
+
 ### 5.2 核心组件索引 | Component Index
 
 | 组件 | 职责概要 | 详见 |
