@@ -7,13 +7,13 @@
 | **Version** | 1.0 |
 | **Author** | PAN CHAO |
 | **Last updated** | 2025-03 |
-| **Related** | [Product Requirements (PRD)](./Arthor-Agent-PRD.md) · [Design docs](./docs/README.md) |
+| **Related** | [Product Requirements (PRD)](./SPEC.md) · [Design docs](./docs/README.md) |
 
 ---
 
 ## Overview | 概述
 
-Arthor Agent is an AI-powered system that automates security assessment of documents, questionnaires, and reports. This document describes the **system architecture**: high-level design, components, data flow, integrations, and deployment. For product goals and requirements, see [Arthor-Agent-PRD.md](./Arthor-Agent-PRD.md).
+Arthor Agent is an AI-powered system that automates security assessment of documents, questionnaires, and reports. This document describes the **system architecture**: high-level design, components, data flow, integrations, and deployment. For product goals and requirements, see [SPEC.md](./SPEC.md).
 
 ---
 
@@ -207,7 +207,7 @@ See [docs/04-integration-guide.md](./docs/04-integration-guide.md) for configura
 
 ## Security Architecture | 安全架构
 
-Security is designed along five areas (detailed in [PRD §7.2](./Arthor-Agent-PRD.md)):
+Security is designed along five areas (detailed in [PRD §7.2](./SPEC.md)):
 
 | Area | Summary |
 |------|---------|
@@ -255,7 +255,7 @@ See [docs/05-deployment-runbook.md](./docs/05-deployment-runbook.md) for environ
 
 | Document | Description |
 |----------|-------------|
-| [Arthor-Agent-PRD.md](./Arthor-Agent-PRD.md) | Product requirements, pain points, features, security controls. |
+| [SPEC.md](./SPEC.md) | Product requirements, pain points, features, security controls. |
 | [docs/01-architecture-and-tech-stack.md](./docs/01-architecture-and-tech-stack.md) | Technology choices and module layout. |
 | [docs/02-api-specification.yaml](./docs/02-api-specification.yaml) | OpenAPI spec. |
 | [docs/03-assessment-report-and-skill-contract.md](./docs/03-assessment-report-and-skill-contract.md) | Report schema and Skill I/O. |

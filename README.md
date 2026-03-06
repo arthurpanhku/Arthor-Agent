@@ -39,7 +39,7 @@ Enterprise security teams face:
 | **Pre-release review pressure** — Security must review and sign off on many technical documents. | **Structured reports** (risks, gaps, remediations) let reviewers focus on decisions, not reading every line. |
 | **Scale vs. consistency** — Many projects and standards lead to inconsistent or delayed assessments. | **Configurable scenarios** and a unified pipeline keep assessments consistent and auditable. |
 
-*See the full problem statement and product goals in the [Product Requirements Document (PRD)](./Arthor-Agent-PRD.md).*
+*See the full problem statement and product goals in the [Product Requirements Document (PRD)](./SPEC.md).*
 
 ---
 
@@ -101,9 +101,9 @@ Detailed architecture and component descriptions are in [ARCHITECTURE.md](./ARCH
 | **Assessment** | Submit files → get structured report (risk items, compliance gaps, remediations). |
 | **LLM** | Configurable provider: **Ollama** (local), OpenAI, or others via abstraction layer. |
 | **API** | REST: submit assessment, get result, upload to KB, query KB, health. |
-| **Security & compliance** | Security requirements and controls (identity, data, application, ops) defined in [PRD §7.2](./Arthor-Agent-PRD.md); see [SECURITY.md](./SECURITY.md). |
+| **Security & compliance** | Security requirements and controls (identity, data, application, ops) defined in [PRD §7.2](./SPEC.md); see [SECURITY.md](./SECURITY.md). |
 
-Roadmap (e.g. AAD/SSO, ServiceNow integration, RBAC) is described in the [PRD](./Arthor-Agent-PRD.md).
+Roadmap (e.g. AAD/SSO, ServiceNow integration, RBAC) is described in the [PRD](./SPEC.md).
 
 ---
 
@@ -186,7 +186,7 @@ Arthor-Agent/
 │   ├── 04-integration-guide.md
 │   ├── 05-deployment-runbook.md
 │   └── schemas/
-├── Arthor-Agent-PRD.md   # Product requirements (full)
+├── SPEC.md   # Product requirements (full)
 ├── LICENSE               # MIT
 ├── SECURITY.md           # Security policy and disclosure
 ├── requirements.txt
@@ -212,7 +212,7 @@ See [.env.example](./.env.example) and [docs/05-deployment-runbook.md](./docs/05
 ## Documentation and PRD
 
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** — System architecture: high-level diagram, Mermaid views (logical, component, sequence, integration, deployment), component design, data flow, security architecture.
-- **[Arthor-Agent-PRD.md](./Arthor-Agent-PRD.md)** — Product requirements: problem statement, solution, architecture summary, features, security controls, and open questions for development.
+- **[SPEC.md](./SPEC.md)** — Product requirements: problem statement, solution, architecture summary, features, security controls, and open questions for development.
 - **Design docs** in [docs/](./docs/): architecture and tech stack, API spec (OpenAPI), assessment report and Skill contract, integration guide (AAD, ServiceNow), deployment runbook.
 
 ---
@@ -220,7 +220,7 @@ See [.env.example](./.env.example) and [docs/05-deployment-runbook.md](./docs/05
 ## Security
 
 - **Vulnerability reporting**: See [SECURITY.md](./SECURITY.md) for how to report issues responsibly.
-- **Security requirements**: The project follows the security controls defined in [PRD §7.2](./Arthor-Agent-PRD.md) (identity, data protection, application security, operations, supply chain).
+- **Security requirements**: The project follows the security controls defined in [PRD §7.2](./SPEC.md) (identity, data protection, application security, operations, supply chain).
 
 ---
 

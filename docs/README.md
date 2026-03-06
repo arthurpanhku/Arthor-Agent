@@ -3,7 +3,7 @@
 本目录存放与 PRD（产品需求文档）配套的**可执行设计与规范**，供开发、集成与运维使用。  
 This directory holds **executable design and specification** artifacts that accompany the PRD for development, integration, and operations.
 
-**PRD 位置 / PRD location**：`../Arthor-Agent-PRD.md`（仓库根目录）
+**PRD 位置 / PRD location**：`../SPEC.md`（仓库根目录）
 
 ---
 
