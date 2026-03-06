@@ -283,22 +283,22 @@ Arthor-Agent/
 
 ## Documentation and PRD | 文档与规格
 
--   **[ARCHITECTURE.md](./ARCHITECTURE.md)** — 系统架构：高层图、Mermaid 视图（逻辑/组件/时序/集成/部署）、组件设计、数据流、安全架构。<br>System architecture: high-level diagram, Mermaid views, component design, data flow, security.
--   **[SPEC.md](./SPEC.md)** — 产品需求与规格：问题陈述、方案、架构摘要、功能、安全控制与开放问题。<br>Product requirements: problem statement, solution, features, security controls.
--   **[CHANGELOG.md](./CHANGELOG.md)** — 版本历史；[Releases](https://github.com/arthurpanhku/Arthor-Agent/releases) 发布说明。<br>Version history; Releases.
--   **设计文档 Design docs** [docs/](./docs/)：架构与技术栈、API 规范（OpenAPI）、评估报告与 Skill 契约、集成指南（AAD、ServiceNow）、部署手册。Q1 发布清单：[docs/LAUNCH-CHECKLIST.md](./docs/LAUNCH-CHECKLIST.md)。<br>Architecture, API spec, contracts, integration guides, deployment runbook.
+-   **[ARCHITECTURE.md](./ARCHITECTURE.md)** — System architecture: high-level diagram, Mermaid views, component design, data flow, security.<br>系统架构：高层图、Mermaid 视图（逻辑/组件/时序/集成/部署）、组件设计、数据流、安全架构。
+-   **[SPEC.md](./SPEC.md)** — Product requirements: problem statement, solution, features, security controls.<br>产品需求与规格：问题陈述、方案、架构摘要、功能、安全控制与开放问题。
+-   **[CHANGELOG.md](./CHANGELOG.md)** — Version history; [Releases](https://github.com/arthurpanhku/Arthor-Agent/releases).<br>版本历史；发布说明。
+-   **Design docs** [docs/](./docs/)：Architecture, API spec (OpenAPI), contracts, integration guides (AAD, ServiceNow), deployment runbook. Q1 Launch Checklist: [docs/LAUNCH-CHECKLIST.md](./docs/LAUNCH-CHECKLIST.md).<br>架构与技术栈、API 规范、评估报告与 Skill 契约、集成指南、部署手册。Q1 发布清单：[docs/LAUNCH-CHECKLIST.md](./docs/LAUNCH-CHECKLIST.md)。
 
 ---
 
 ## Contributing | 参与贡献
 
-**中文**：欢迎提交 Issue 与 Pull Request。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 了解开发环境、测试与提交规范。参与即视为同意 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) 行为准则。
-
-🤖 **AI 辅助贡献**：我们也鼓励使用 AI 工具参与贡献！请查看 [CONTRIBUTING_WITH_AI.md](CONTRIBUTING_WITH_AI.md) 获取最佳实践指南。
-
 **English**: Issues and Pull Requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests, and commit guidelines. By participating you agree to the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 🤖 **AI-Assisted Contribution**: We encourage using AI tools to contribute! Check out [CONTRIBUTING_WITH_AI.md](CONTRIBUTING_WITH_AI.md) for best practices.
+
+**中文**：欢迎提交 Issue 与 Pull Request。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 了解开发环境、测试与提交规范。参与即视为同意 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) 行为准则。
+
+🤖 **AI 辅助贡献**：我们也鼓励使用 AI 工具参与贡献！请查看 [CONTRIBUTING_WITH_AI.md](CONTRIBUTING_WITH_AI.md) 获取最佳实践指南。
 
 ---
 
