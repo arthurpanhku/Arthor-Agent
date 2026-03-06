@@ -25,6 +25,7 @@ wheels/
 venv/
 ENV/
 env/
+.venv_mcp/
 
 # Environment and secrets
 .env
@@ -49,6 +50,7 @@ chroma/
 # OS
 .DS_Store
 Thumbs.db
+*.mov
 
 # Testing
 .coverage
