@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arthor Agent — Demo</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.25rem; }
+    .row { margin: 1rem 0; }
+    input[type="file"] { margin-right: 0.5rem; }
+    button { padding: 0.5rem 1rem; background: #238636; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #2ea043; }
+    button:disabled { background: #8b949e; cursor: not-allowed; }
+    pre { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 1rem; overflow: auto; font-size: 12px; }
+    .url { font-size: 0.9rem; color: #57606a; }
+    .error { color: #cf2222; }
+    .ok { color: #1a7f37; }
+  </style>
+</head>
+<body>
+  <h1>Arthor Agent — Assessment demo</h1>
+  <p class="url">API: <input type="text" id="baseUrl" value="http://localhost:8000" size="40"> (start server with <code>uvicorn app.main:app</code> or Docker)</p>
+  <div class="row">
+    <input type="file" id="file" accept=".txt,.md,.pdf,.docx,.xlsx,.pptx">
+    <button id="btn">Assess</button>
+  </div>
+  <div id="out"></div>
+  <script>
+    const base = document.getElementById('baseUrl');
+    const file = document.getElementById('file');
+    const btn = document.getElementById('btn');
+    const out = document.getElementById('out');
+    function log(msg, cls) {
+      const p = document.createElement('pre');
+      p.textContent = msg;
+      if (cls) p.className = cls;
+      out.appendChild(p);
+    }
+    btn.addEventListener('click', async () => {
+      if (!file.files.length) { log('Please select a file.', 'error'); return; }
+      out.innerHTML = '';
+      btn.disabled = true;
+      const api = base.value.replace(/\/$/, '') + '/api/v1';
+      try {
+        const fd = new FormData();
+        fd.append('files', file.files[0]);
+        fd.append('scenario_id', 'default');
+        log('Submitting...');
+        const r1 = await fetch(api + '/assessments', { method: 'POST', body: fd });
+        const data = await r1.json();
+        const taskId = data.task_id;
+        if (!taskId) { log('No task_id: ' + JSON.stringify(data), 'error'); return; }
+        log('task_id: ' + taskId + '\nFetching report...');
+        const r2 = await fetch(api + '/assessments/' + taskId);
+        const report = await r2.json();
+        log(JSON.stringify(report, null, 2), 'ok');
+      } catch (e) {
+        log('Error: ' + e.message + '\n\nIs the API running at ' + api + '?', 'error');
+      }
+      btn.disabled = false;
+    });
+  </script>
+</body>
+</html>

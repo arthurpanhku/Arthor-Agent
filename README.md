@@ -160,8 +160,8 @@ Roadmap (e.g. AAD/SSO, ServiceNow, RBAC): [SPEC.md](./SPEC.md).
 
 ## Quick Start | 快速开始
 
-📹 *Demo: a short GIF (upload → report) can be added under [docs/images/demo-assessment.gif](docs/images/demo-assessment.gif).*  
-*演示：可在 [docs/images/demo-assessment.gif](docs/images/demo-assessment.gif) 添加短视频。*
+📹 **录制 30 秒演示**：先启动 API，再打开 [docs/demo.html](docs/demo.html) 选文件点 Assess，或运行 `./scripts/demo.sh`；录屏保存为 `docs/images/demo-assessment.gif`。详见 [docs/DEMO-RECORD.md](docs/DEMO-RECORD.md)。  
+*Record demo: start API, open [docs/demo.html](docs/demo.html) or run `./scripts/demo.sh`; save screen capture as [docs/images/demo-assessment.gif](docs/images/demo-assessment.gif). See [docs/DEMO-RECORD.md](docs/DEMO-RECORD.md).*
 
 ### Option A: Docker（推荐）| Docker (recommended)
 
