@@ -95,6 +95,16 @@ For environments without public internet access:
 
 ## 3. Verify Installation | 验证安装
 
+### 3.1 Automated Verification (Recommended)
+
+Run the integration test script to verify core functions (API, Skills, Orchestrator) in an isolated environment:
+
+```bash
+./test_integration.sh
+```
+
+### 3.2 Manual Check
+
 After deployment, you can run a quick self-check using `pytest` (requires python environment):
 
 ```bash

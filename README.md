@@ -283,6 +283,16 @@ Arthor-Agent/
 To verify your installation or contribute to the project, run the test suite:
 如需验证安装或参与开发，请运行测试套件：
 
+### Option A: One-Click Test (Recommended)
+Automatically sets up a test environment and runs all checks.
+自动设置测试环境并运行所有检查。
+
+```bash
+chmod +x test_integration.sh
+./test_integration.sh
+```
+
+### Option B: Manual
 ```bash
 # 1. Install dev dependencies
 pip install -r requirements-dev.txt
