@@ -93,7 +93,23 @@ For environments without public internet access:
 
 ---
 
-## 3. Configuration Reference | 配置项清单
+## 3. Verify Installation | 验证安装
+
+After deployment, you can run a quick self-check using `pytest` (requires python environment):
+
+```bash
+# Install test deps
+pip install -r requirements-dev.txt
+
+# Run integration tests against your local instance (mocking LLM)
+pytest tests/test_health.py tests/test_assessments_api.py
+```
+
+If you see `PASSED`, the core API and orchestration logic are working correctly.
+
+---
+
+## 4. Configuration Reference | 配置项清单
 
 See `.env.example` for the template.
 

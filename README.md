@@ -278,6 +278,22 @@ Arthor-Agent/
 
 ---
 
+## Development & Testing | 开发与测试
+
+To verify your installation or contribute to the project, run the test suite:
+如需验证安装或参与开发，请运行测试套件：
+
+```bash
+# 1. Install dev dependencies
+pip install -r requirements-dev.txt
+
+# 2. Run all tests
+pytest
+
+# 3. Run specific test (e.g. Skills API)
+pytest tests/test_skills_api.py
+```
+
 ## Contributing | 参与贡献
 
 **English**: Issues and Pull Requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests, and commit guidelines. By participating you agree to the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
