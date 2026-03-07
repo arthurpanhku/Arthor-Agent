@@ -127,6 +127,28 @@ flowchart TB
 
 ---
 
+## 👀 Features at a Glance | 功能预览
+
+### 1. Assessment Workbench | 评估工作台
+Upload documents, select a persona (e.g. SOC2 Auditor), and get instant risk analysis.
+上传文档，选择评估角色（如 SOC2 审计员），即刻获取风险分析。
+
+![Assessment Workbench](docs/images/ui-dashboard.png)
+
+### 2. Structured Report | 结构化报告
+Clear view of Risks, Compliance Gaps, and Remediation Steps.
+清晰的风险项、合规差距与整改建议视图。
+
+![Structured Report](docs/images/ui-report.png)
+
+### 3. Knowledge Base Management | 知识库管理
+Upload policy documents to RAG. The agent cites these as evidence.
+上传策略文档至 RAG 知识库，Agent 将引用其作为评估依据。
+
+![Knowledge Base](docs/images/ui-kb.png)
+
+---
+
 ## Quick Start | 快速开始
 
 ### Option A: One-Click Deployment (Recommended) | 一键部署（推荐）
