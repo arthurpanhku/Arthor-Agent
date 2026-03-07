@@ -2,9 +2,13 @@
 Agent orchestration: multi-agent flow with citations, confidence, and history reuse.
 """
 
-from datetime import datetime, timezone
+import asyncio
+import uuid
 from uuid import UUID
+from datetime import datetime
+from typing import Optional
 
+from app.agent.skills_service import get_skill_service
 from app.core.config import settings
 from app.kb.service import KnowledgeBaseService
 from app.llm.base import invoke_llm
@@ -19,14 +23,12 @@ from app.models.assessment import (
 from app.models.parser import ParsedDocument
 
 
-from app.agent.skills_service import get_skill_service
-
 async def run_assessment(
     task_id: UUID,
     parsed_documents: list[ParsedDocument],
-    scenario_id: str | None = None,
-    project_id: str | None = None,
-    skill_id: str | None = None,
+    scenario_id: Optional[str] = None,
+    project_id: Optional[str] = None,
+    skill_id: Optional[str] = None,
 ) -> AssessmentReport:
     # 1. Load Skill (Persona)
     skill_service = get_skill_service()
@@ -63,15 +65,16 @@ async def run_assessment(
     report = await _parse_llm_output_to_report(
         raw=reviewed_raw,
         task_id=task_id,
-        scenario_id=scenario_id,
-        project_id=project_id,
         policy_chunks=policy_chunks,
         history_chunks=history_chunks,
+        scenario_id=scenario_id,
+        project_id=project_id,
     )
     return report
 
 
-def _build_document_context(parsed_documents: list[ParsedDocument]) -> dict[str, str]:
+def _build_document_context(parsed_documents: list[ParsedDocument]) -> dict:
+    """Combine parsed documents into a single text block."""
     doc_texts: list[str] = []
     for d in parsed_documents:
         c = d.content if isinstance(d.content, str) else str(d.content)
@@ -80,9 +83,11 @@ def _build_document_context(parsed_documents: list[ParsedDocument]) -> dict[str,
     return {"full_text": combined_input, "query_seed": combined_input[:2000]}
 
 
+from typing import Optional
+
 def _policy_and_history_agent(
     query_seed: str, 
-    skill_focus: list[str] | None = None
+    skill_focus: Optional[list[str]] = None
 ) -> tuple[list, list]:
     kb = KnowledgeBaseService()
     
@@ -107,7 +112,7 @@ def _policy_and_history_agent(
 
 def _evidence_agent(
     parsed_documents: list[ParsedDocument], 
-    skill_focus: list[str] | None = None
+    skill_focus: Optional[list[str]] = None
 ) -> str:
     evidence_lines: list[str] = []
     
@@ -138,7 +143,7 @@ async def _drafter_agent(
     full_text: str,
     policy_chunks: list,
     history_chunks: list,
-    skill: object = None,
+    skill: Optional[object] = None,
 ) -> str:
     policy_context = _format_chunks_with_ids(policy_chunks, prefix="POL")
     history_context = _format_chunks_with_ids(history_chunks, prefix="HIS")
@@ -172,7 +177,7 @@ async def _reviewer_agent(
     evidence_context: str,
     policy_chunks: list,
     history_chunks: list,
-    skill: object = None,
+    skill: Optional[object] = None,
 ) -> str:
     policy_context = _format_chunks_with_ids(policy_chunks, prefix="POL")
     history_context = _format_chunks_with_ids(history_chunks, prefix="HIS")
@@ -277,101 +282,79 @@ async def _estimate_confidence(
 async def _parse_llm_output_to_report(
     raw: str,
     task_id: UUID,
-    scenario_id: str | None,
-    project_id: str | None,
     policy_chunks: list,
     history_chunks: list,
+    scenario_id: Optional[str] = None,
+    project_id: Optional[str] = None,
 ) -> AssessmentReport:
     import json
-    import re
+    import uuid
 
-    risk_items: list[RiskItem] = []
-    compliance_gaps: list[ComplianceGap] = []
-    remediations: list[Remediation] = []
-    sources: list[SourceCitation] = []
-    summary = "Assessment completed."
-    confidence = 0.0
+    # Attempt to extract JSON
+    parsed = {}
+    try:
+        # Simple cleanup
+        cleaned = raw.replace("```json", "").replace("```", "").strip()
+        parsed = json.loads(cleaned)
+    except json.JSONDecodeError:
+        # Fallback if LLM output isn't clean JSON
+        parsed = {
+            "summary": "Failed to parse LLM output.",
+            "risk_items": [],
+            "confidence": 0.0,
+        }
 
-    json_match = re.search(r"\{[\s\S]*\}", raw)
-    if json_match:
-        try:
-            data = json.loads(json_match.group(0))
-            summary = data.get("summary") or summary
-            for i, r in enumerate(data.get("risk_items") or []):
-                risk_items.append(
-                    RiskItem(
-                        id=r.get("id") or f"risk-{i}",
-                        title=r.get("title") or "Unnamed risk",
-                        severity=r.get("severity") or "medium",
-                        description=r.get("description"),
-                        source_ref=r.get("source_ref"),
-                        category=r.get("category"),
-                    )
-                )
-            for i, g in enumerate(data.get("compliance_gaps") or []):
-                compliance_gaps.append(
-                    ComplianceGap(
-                        id=g.get("id") or f"gap-{i}",
-                        control_or_clause=g.get("control_or_clause") or "",
-                        gap_description=g.get("gap_description") or "",
-                        evidence_suggestion=g.get("evidence_suggestion"),
-                        framework=g.get("framework"),
-                    )
-                )
-            for i, rem in enumerate(data.get("remediations") or []):
-                remediations.append(
-                    Remediation(
-                        id=rem.get("id") or f"rem-{i}",
-                        action=rem.get("action") or "",
-                        priority=rem.get("priority"),
-                        related_risk_ids=rem.get("related_risk_ids") or [],
-                        related_gap_ids=rem.get("related_gap_ids") or [],
-                    )
-                )
-            for i, s in enumerate(data.get("sources") or []):
-                sources.append(
-                    SourceCitation(
-                        id=s.get("id") or f"S{i + 1}",
-                        file=s.get("file") or "unknown",
-                        page=s.get("page"),
-                        paragraph_id=s.get("paragraph_id"),
-                        excerpt=s.get("excerpt") or "",
-                        evidence_link=s.get("evidence_link"),
-                        score=s.get("score"),
-                    )
-                )
-            if data.get("confidence") is not None:
-                confidence = float(data.get("confidence"))
-        except (json.JSONDecodeError, KeyError, TypeError, ValueError):
-            summary = (
-                "Assessment completed with partial parsing; "
-                "raw output may contain more."
-            )
-
-    if not sources:
-        sources = _derive_sources_from_chunks(policy_chunks, history_chunks)
-    if confidence <= 0:
-        confidence = await _estimate_confidence(
-            summary=summary,
-            risk_count=len(risk_items),
-            source_count=len(sources),
-        )
+    # Construct source citations
+    citations = _derive_sources_from_chunks(policy_chunks, history_chunks)
+    
+    # Merge LLM-generated sources if any
+    llm_sources = parsed.get("sources", [])
+    if isinstance(llm_sources, list):
+        # We might merge or validate them here. For MVP, we'll append unique ones
+        # or just rely on our derived citations which are grounded in truth.
+        # Let's trust derived citations more for now.
+        pass
 
     return AssessmentReport(
-        version="2.0",
         task_id=str(task_id),
         status="completed",
-        summary=summary,
-        risk_items=risk_items,
-        compliance_gaps=compliance_gaps,
-        remediations=remediations,
-        confidence=confidence,
-        sources=sources,
+        summary=parsed.get("summary", "No summary provided."),
+        risk_items=[
+            RiskItem(
+                id=str(uuid.uuid4())[:8],
+                title=item.get("title", "Untitled Risk"),
+                severity=item.get("severity", "medium"),
+                description=item.get("description"),
+                source_ref=item.get("source_ref"),
+                category=item.get("category"),
+            )
+            for item in parsed.get("risk_items", [])
+        ],
+        compliance_gaps=[
+            ComplianceGap(
+                id=str(uuid.uuid4())[:8],
+                control_or_clause=gap.get("control_or_clause", "Unknown"),
+                gap_description=gap.get("gap_description", ""),
+                evidence_suggestion=gap.get("evidence_suggestion"),
+                framework=gap.get("framework"),
+            )
+            for gap in parsed.get("compliance_gaps", [])
+        ],
+        remediations=[
+            Remediation(
+                id=str(uuid.uuid4())[:8],
+                action=rem.get("action", "Unknown action"),
+                priority=rem.get("priority", "medium"),
+                related_risk_ids=rem.get("related_risk_ids", []),
+            )
+            for rem in parsed.get("remediations", [])
+        ],
+        confidence=float(parsed.get("confidence", 0.0)),
+        sources=citations,
         metadata=ReportMetadata(
             scenario_id=scenario_id,
             project_id=project_id,
             model_used=settings.LLM_PROVIDER,
-            completed_at=datetime.now(timezone.utc),
+            completed_at=datetime.utcnow(),
         ),
-        format="json",
     )

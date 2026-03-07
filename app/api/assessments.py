@@ -4,33 +4,35 @@ PRD §6; docs/02-api-specification.yaml.
 """
 
 from datetime import datetime, timezone
+from typing import Literal, Optional
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from app.agent.orchestrator import run_assessment
+from app.core.config import settings
 from app.kb.service import KnowledgeBaseService
 from app.models.assessment import AssessmentTaskCreated, AssessmentTaskResult
 from app.parser import parse_file
 
-router = APIRouter(prefix="/assessments", tags=["assessment"])
-
-# In-memory task store for MVP (replace with DB/Redis later)
-_tasks: dict = {}
+router = APIRouter(prefix="/assessments", tags=["assessments"])
 
 
+# --- Request Models ---
 class ReviewActionRequest(BaseModel):
-    action: str
-    reviewer: str
-    comment: str | None = None
-    assignee: str | None = None
+    action: Literal["approve", "reject", "comment", "escalate"]
+    comment: Optional[str] = None
+    assignee: Optional[str] = None
 
 
 class CommentRequest(BaseModel):
-    author: str
-    comment: str
-    mention: str | None = None
+    content: str
+    user_id: str = "anonymous"
+
+
+# --- In-Memory Task Store (MVP) ---
+_tasks: dict = {}
 
 
 @router.post("", response_model=AssessmentTaskCreated)
@@ -38,9 +40,9 @@ async def submit_assessment(
     files: list[UploadFile] = File(  # noqa: B008
         ..., description="Documents to assess"
     ),
-    scenario_id: str | None = Form(None),
-    project_id: str | None = Form(None),
-    skill_id: str | None = Form(None),
+    scenario_id: Optional[str] = Form(None),
+    project_id: Optional[str] = Form(None),
+    skill_id: Optional[str] = Form(None),
     collaborative_mode: bool = Form(True),
 ):
     """Submit an assessment task; returns task_id for polling."""
@@ -48,34 +50,30 @@ async def submit_assessment(
 
     if len(files) > settings.UPLOAD_MAX_FILES:
         raise HTTPException(413, f"Max {settings.UPLOAD_MAX_FILES} files allowed")
-    if not files:
-        raise HTTPException(400, "At least one file required")
 
-    task_id = uuid4()
     parsed_list = []
-    for f in files:
-        content = await f.read()
-        if len(content) > settings.upload_max_bytes:
+    for file in files:
+        content = await file.read()
+        if len(content) > settings.UPLOAD_MAX_FILE_SIZE_MB * 1024 * 1024:
             raise HTTPException(
-                413, f"File {f.filename} exceeds {settings.UPLOAD_MAX_FILE_SIZE_MB}MB"
+                413,
+                f"File {file.filename} exceeds {settings.UPLOAD_MAX_FILE_SIZE_MB}MB",
             )
         try:
-            parsed = parse_file(content, f.filename or "unknown")
+            parsed = parse_file(content, file.filename or "unknown")
+            parsed.metadata.scenario_id = scenario_id
             parsed_list.append(parsed)
         except ValueError as e:
             raise HTTPException(400, str(e)) from e
 
+    # Create Task
+    task_id = uuid4()
     created_at = datetime.now(timezone.utc)
     _tasks[str(task_id)] = {
-        "status": "running",
-        "report": None,
-        "error": None,
+        "task_id": task_id,
+        "status": "pending",  # Will move to running -> review_pending
         "created_at": created_at,
-        "completed_at": None,
-        "collaborative_mode": collaborative_mode,
         "version": 1,
-        "assignee": None,
-        "comments": [],
         "activity": [
             {
                 "type": "task_created",
@@ -84,6 +82,7 @@ async def submit_assessment(
             }
         ],
         "revisions": [],
+        "comments": [],
     }
 
     try:
@@ -145,26 +144,22 @@ async def submit_assessment(
 
 
 @router.get("/{task_id}", response_model=AssessmentTaskResult)
-async def get_assessment(task_id: str):
-    """Get assessment task status and report."""
+async def get_assessment_result(task_id: str):
     if task_id not in _tasks:
         raise HTTPException(404, "Task not found")
-    t = _tasks[task_id]
-    from app.models.assessment import AssessmentReport
-
-    report = None
-    if t.get("report"):
-        report = AssessmentReport(**t["report"])
+    task = _tasks[task_id]
+    
+    # Map raw dict to Pydantic model
     return AssessmentTaskResult(
-        task_id=UUID(task_id),
-        status=t["status"],
-        report=report,
-        error_message=t.get("error"),
-        created_at=t["created_at"],
-        completed_at=t.get("completed_at"),
-        version=t.get("version", 1),
-        assignee=t.get("assignee"),
-        comments=t.get("comments", []),
+        task_id=task["task_id"],
+        status=task["status"],
+        report=task.get("report"),
+        error_message=task.get("error"),
+        created_at=task["created_at"],
+        completed_at=task.get("completed_at"),
+        version=task.get("version", 1),
+        assignee=task.get("assignee"),
+        comments=task.get("comments", []),
     )
 
 
@@ -172,108 +167,74 @@ async def get_assessment(task_id: str):
 async def review_assessment(task_id: str, body: ReviewActionRequest):
     if task_id not in _tasks:
         raise HTTPException(404, "Task not found")
+    
     task = _tasks[task_id]
-    if task.get("status") not in {"review_pending", "rejected", "escalated"}:
-        raise HTTPException(409, "Task is not in a reviewable state")
-    action = body.action.lower().strip()
-    status_mapping = {
-        "approve": "approved",
-        "reject": "rejected",
-        "escalate": "escalated",
-    }
-    if action not in status_mapping:
-        raise HTTPException(400, "action must be one of: approve, reject, escalate")
-    task["status"] = status_mapping[action]
-    task["assignee"] = body.assignee or task.get("assignee")
-    task["version"] = int(task.get("version", 1)) + 1
-    activity_entry = {
-        "type": "review_action",
+    current_status = task["status"]
+    
+    if current_status not in ["review_pending", "escalated"]:
+        raise HTTPException(400, f"Cannot review task in status {current_status}")
+
+    new_status = current_status
+    activity_type = "review_action"
+    
+    if body.action == "approve":
+        new_status = "approved"
+    elif body.action == "reject":
+        new_status = "rejected"
+    elif body.action == "escalate":
+        new_status = "escalated"
+    elif body.action == "comment":
+        pass  # Status doesn't change
+
+    # Update task
+    task["status"] = new_status
+    if body.assignee:
+        task["assignee"] = body.assignee
+
+    # Add activity
+    task["activity"].append({
+        "type": activity_type,
+        "action": body.action,
         "at": datetime.now(timezone.utc).isoformat(),
-        "reviewer": body.reviewer,
-        "action": action,
         "comment": body.comment,
-        "assignee": task.get("assignee"),
-        "version": task["version"],
-    }
-    task["activity"].append(activity_entry)
+        "assignee": body.assignee
+    })
+    
+    # Add comment if provided
     if body.comment:
-        task["comments"].append(
-            {
-                "author": body.reviewer,
-                "comment": body.comment,
-                "at": datetime.now(timezone.utc).isoformat(),
-            }
-        )
-    task["revisions"].append(
-        {
-            "version": task["version"],
-            "status": task["status"],
-            "updated_at": datetime.now(timezone.utc).isoformat(),
-            "report": task.get("report"),
-        }
-    )
-    if task.get("report"):
-        try:
-            kb = KnowledgeBaseService()
-            kb.add_history_response(
-                task_id=task_id,
-                version=task["version"],
-                scenario_id=task.get("report", {})
-                .get("metadata", {})
-                .get("scenario_id"),
-                report_json=task["report"],
-            )
-        except Exception:
-            task["activity"].append(
-                {
-                    "type": "history_index_skipped",
-                    "at": datetime.now(timezone.utc).isoformat(),
-                    "message": "History indexing unavailable in current runtime",
-                }
-            )
-    return {
-        "task_id": task_id,
-        "status": task["status"],
-        "version": task["version"],
-        "assignee": task.get("assignee"),
-    }
+        task["comments"].append({
+            "content": body.comment,
+            "at": datetime.now(timezone.utc).isoformat(),
+            "action": body.action
+        })
 
-
-@router.post("/{task_id}/comment")
-async def comment_assessment(task_id: str, body: CommentRequest):
-    if task_id not in _tasks:
-        raise HTTPException(404, "Task not found")
-    task = _tasks[task_id]
-    item = {
-        "author": body.author,
-        "comment": body.comment,
-        "mention": body.mention,
-        "at": datetime.now(timezone.utc).isoformat(),
-    }
-    task["comments"].append(item)
-    task["activity"].append({"type": "comment", **item})
-    if body.mention:
-        task["assignee"] = body.mention
-    return {
-        "task_id": task_id,
-        "comments": task["comments"],
-        "assignee": task["assignee"],
-    }
+    return {"status": new_status, "task_id": task_id}
 
 
 @router.get("/{task_id}/activity")
-async def get_assessment_activity(task_id: str):
+async def get_task_activity(task_id: str):
     if task_id not in _tasks:
         raise HTTPException(404, "Task not found")
-    task = _tasks[task_id]
-    return {
-        "task_id": task_id,
-        "status": task["status"],
-        "version": task.get("version", 1),
-        "activity": task.get("activity", []),
-        "comments": task.get("comments", []),
-        "revisions": task.get("revisions", []),
+    return _tasks[task_id].get("activity", [])
+
+
+@router.post("/{task_id}/comments")
+async def add_comment(task_id: str, body: CommentRequest):
+    if task_id not in _tasks:
+        raise HTTPException(404, "Task not found")
+    
+    comment_entry = {
+        "content": body.content,
+        "user_id": body.user_id,
+        "at": datetime.now(timezone.utc).isoformat(),
     }
+    _tasks[task_id]["comments"].append(comment_entry)
+    _tasks[task_id]["activity"].append({
+        "type": "comment_added",
+        "at": datetime.now(timezone.utc).isoformat(),
+        "preview": body.content[:50]
+    })
+    return {"message": "Comment added"}
 
 
 @router.get("/{task_id}/reuse")

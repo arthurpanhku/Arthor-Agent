@@ -4,7 +4,7 @@ Skills Management Service (InMemory / File based for now).
 import json
 import os
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 from app.agent.skills_registry import get_builtin_skills
 from app.models.skill import Skill, SkillCreate, SkillUpdate
@@ -39,7 +39,7 @@ class SkillService:
         custom = list(self.custom_skills.values())
         return builtin + custom
 
-    def get_skill(self, skill_id: str) -> Skill | None:
+    def get_skill(self, skill_id: str) -> Optional[Skill]:
         if skill_id in self.custom_skills:
             return self.custom_skills[skill_id]
         for s in get_builtin_skills():

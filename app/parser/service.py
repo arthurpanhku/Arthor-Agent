@@ -24,10 +24,9 @@ def _parse_pdf(content: bytes, filename: str) -> ParsedDocument:
     doc.close()
     text = "\n\n".join(parts).strip() or "(no text extracted)"
     return ParsedDocument(
-        format="markdown",
         content=text,
         metadata=ParsedDocumentMetadata(
-            filename=_safe_filename(filename), type="application/pdf", pages=len(parts)
+            filename=_safe_filename(filename), type="pdf"
         ),
     )
 
@@ -42,11 +41,10 @@ def _parse_docx(content: bytes, filename: str) -> ParsedDocument:
             parts.append(" | ".join(cell.text.strip() for cell in row.cells))
     text = "\n\n".join(parts).strip() or "(no text extracted)"
     return ParsedDocument(
-        format="markdown",
         content=text,
         metadata=ParsedDocumentMetadata(
             filename=_safe_filename(filename),
-            type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            type="docx",
         ),
     )
 
@@ -63,11 +61,10 @@ def _parse_xlsx(content: bytes, filename: str) -> ParsedDocument:
     wb.close()
     text = "\n".join(parts).strip() or "(no content)"
     return ParsedDocument(
-        format="markdown",
         content=text,
         metadata=ParsedDocumentMetadata(
             filename=_safe_filename(filename),
-            type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            type="xlsx",
         ),
     )
 
@@ -84,11 +81,10 @@ def _parse_pptx(content: bytes, filename: str) -> ParsedDocument:
                 parts.append(shape.text)
     text = "\n\n".join(parts).strip() or "(no text extracted)"
     return ParsedDocument(
-        format="markdown",
         content=text,
         metadata=ParsedDocumentMetadata(
             filename=_safe_filename(filename),
-            type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            type="pptx",
         ),
     )
 
@@ -99,10 +95,9 @@ def _parse_plain(content: bytes, filename: str, content_type: str) -> ParsedDocu
     except UnicodeDecodeError:
         text = content.decode("latin-1", errors="replace")
     return ParsedDocument(
-        format="markdown",
         content=text.strip() or "(empty)",
         metadata=ParsedDocumentMetadata(
-            filename=_safe_filename(filename), type=content_type or "text/plain"
+            filename=_safe_filename(filename), type=content_type
         ),
     )
 
@@ -114,8 +109,8 @@ EXTENSION_TO_PARSER = {
     ".docx": _parse_docx,
     ".xlsx": _parse_xlsx,
     ".pptx": _parse_pptx,
-    ".txt": lambda c, f: _parse_plain(c, f, "text/plain"),
-    ".md": lambda c, f: _parse_plain(c, f, "text/markdown"),
+    ".txt": lambda c, f: _parse_plain(c, f, "txt"),
+    ".md": lambda c, f: _parse_plain(c, f, "md"),
 }
 
 

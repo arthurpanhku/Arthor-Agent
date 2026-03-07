@@ -5,7 +5,7 @@ docs/03-assessment-report-and-skill-contract.md.
 """
 
 from datetime import datetime
-from typing import Literal
+from typing import Literal, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -15,23 +15,23 @@ class RiskItem(BaseModel):
     id: str
     title: str
     severity: Literal["low", "medium", "high", "critical"]
-    description: str | None = None
-    source_ref: str | None = None
-    category: str | None = None
+    description: Optional[str] = None
+    source_ref: Optional[str] = None
+    category: Optional[str] = None
 
 
 class ComplianceGap(BaseModel):
     id: str
     control_or_clause: str
     gap_description: str
-    evidence_suggestion: str | None = None
-    framework: str | None = None
+    evidence_suggestion: Optional[str] = None
+    framework: Optional[str] = None
 
 
 class Remediation(BaseModel):
     id: str
     action: str
-    priority: Literal["low", "medium", "high"] | None = None
+    priority: Optional[Literal["low", "medium", "high"]] = None
     related_risk_ids: list[str] = Field(default_factory=list)
     related_gap_ids: list[str] = Field(default_factory=list)
 
@@ -39,18 +39,18 @@ class Remediation(BaseModel):
 class SourceCitation(BaseModel):
     id: str
     file: str
-    page: int | None = None
-    paragraph_id: str | None = None
+    page: Optional[int] = None
+    paragraph_id: Optional[str] = None
     excerpt: str
-    evidence_link: str | None = None
-    score: float | None = None
+    evidence_link: Optional[str] = None
+    score: Optional[float] = None
 
 
 class ReportMetadata(BaseModel):
-    scenario_id: str | None = None
-    project_id: str | None = None
-    model_used: str | None = None
-    completed_at: datetime | None = None
+    scenario_id: Optional[str] = None
+    project_id: Optional[str] = None
+    model_used: Optional[str] = None
+    completed_at: Optional[datetime] = None
 
 
 class AssessmentReport(BaseModel):
@@ -63,14 +63,14 @@ class AssessmentReport(BaseModel):
     remediations: list[Remediation] = Field(default_factory=list)
     confidence: float = Field(default=0.0, ge=0.0, le=1.0)
     sources: list[SourceCitation] = Field(default_factory=list)
-    metadata: ReportMetadata | None = None
+    metadata: Optional[ReportMetadata] = None
     format: Literal["json", "markdown"] = "json"
 
 
 class AssessmentTaskCreated(BaseModel):
     task_id: UUID
     status: Literal["accepted", "queued"]
-    message: str | None = None
+    message: Optional[str] = None
 
 
 class AssessmentTaskResult(BaseModel):
@@ -85,10 +85,10 @@ class AssessmentTaskResult(BaseModel):
         "completed",
         "failed",
     ]
-    report: AssessmentReport | None = None
-    error_message: str | None = None
+    report: Optional[AssessmentReport] = None
+    error_message: Optional[str] = None
     created_at: datetime
-    completed_at: datetime | None = None
+    completed_at: Optional[datetime] = None
     version: int = 1
-    assignee: str | None = None
+    assignee: Optional[str] = None
     comments: list[dict] = Field(default_factory=list)

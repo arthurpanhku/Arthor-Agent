@@ -103,7 +103,7 @@ def test_submit_assessment_with_skill(client):
             files=files
         )
         
-    assert captured_args["skill_id"] == "iso-27001-auditor"
+    assert captured_args.get("skill_id") == "iso-27001-auditor"
 
 
 def test_review_comment_and_activity_flow(client):
@@ -117,32 +117,42 @@ def test_review_comment_and_activity_flow(client):
         new_callable=AsyncMock,
         side_effect=mock_run_assessment,
     ):
-        files = [("files", ("sample.txt", b"Access control policy", "text/plain"))]
-        created = client.post("/api/v1/assessments", files=files).json()
-    task_id = created["task_id"]
+        files = [("files", ("sample.txt", b"Content", "text/plain"))]
+        r = client.post(
+            "/api/v1/assessments", 
+            data={"collaborative_mode": True}, 
+            files=files
+        )
+        created = r.json()
+        task_id = created["task_id"]
 
-    comment = client.post(
-        f"/api/v1/assessments/{task_id}/comment",
-        json={
-            "author": "analyst",
-            "comment": "Please validate MFA evidence",
-            "mention": "security.lead",
-        },
+    # 1. Check status is review_pending
+    r_check = client.get(f"/api/v1/assessments/{task_id}")
+    assert r_check.json()["status"] == "review_pending"
+
+    # 2. Add comment
+    client.post(
+        f"/api/v1/assessments/{task_id}/comments",
+        json={"content": "Looks risky", "user_id": "auditor_1"}
     )
-    assert comment.status_code == 200
 
-    review = client.post(
+    # 3. Approve
+    client.post(
         f"/api/v1/assessments/{task_id}/review",
-        json={"action": "approve", "reviewer": "security.lead", "comment": "LGTM"},
+        json={"action": "approve", "comment": "LGTM", "assignee": "manager"}
     )
-    assert review.status_code == 200
-    assert review.json().get("status") == "approved"
 
-    activity = client.get(f"/api/v1/assessments/{task_id}/activity")
-    assert activity.status_code == 200
-    body = activity.json()
-    assert isinstance(body.get("activity"), list)
-    assert isinstance(body.get("comments"), list)
+    # 4. Verify final state
+    r_final = client.get(f"/api/v1/assessments/{task_id}")
+    data = r_final.json()
+    assert data["status"] == "approved"
+    assert data["assignee"] == "manager"
+    
+    # Check activity log
+    r_act = client.get(f"/api/v1/assessments/{task_id}/activity")
+    activity = r_act.json()
+    assert any(a["type"] == "comment_added" for a in activity)
+    assert any(a["type"] == "review_action" and a["action"] == "approve" for a in activity)
 
 
 def test_get_assessment_not_found_404(client):

@@ -7,21 +7,19 @@ from app.parser.service import ALLOWED_EXTENSIONS
 
 
 def test_parse_txt():
-    """Parse plain text file."""
-    content = b"Hello, this is a security questionnaire.\nAnswer: Yes."
+    content = b"Simple text content."
     doc = parse_file(content, "sample.txt")
-    assert doc.content is not None
-    assert "security questionnaire" in doc.content
     assert doc.metadata.filename == "sample.txt"
-    assert doc.format == "markdown"
+    assert doc.metadata.type == "txt"
+    assert doc.content == "Simple text content."
 
 
 def test_parse_md():
-    """Parse markdown file."""
-    content = b"# Policy\n\n- Item 1\n- Item 2"
+    content = b"# Heading\n\n- item 1"
     doc = parse_file(content, "policy.md")
-    assert "Policy" in doc.content
     assert doc.metadata.filename == "policy.md"
+    assert doc.metadata.type == "md"
+    assert "# Heading" in doc.content
 
 
 def test_parse_unsupported_extension_raises():

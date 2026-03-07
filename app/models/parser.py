@@ -3,23 +3,22 @@ Parsed document model.
 Aligned with docs/03-assessment-report-and-skill-contract.md §2 Parser Output Schema.
 """
 
-from typing import Any
+from datetime import datetime
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
 
 class ParsedDocumentMetadata(BaseModel):
     filename: str
-    type: str  # MIME or extension
-    pages: int | None = None
-    language: str | None = None
+    type: Literal["pdf", "docx", "xlsx", "pptx", "txt", "md"]
+    upload_time: datetime = Field(default_factory=datetime.utcnow)
+    scenario_id: Optional[str] = None
+    file_hash: Optional[str] = None
 
 
 class ParsedDocument(BaseModel):
-    """Unified output from document parser for assessment and KB ingestion."""
-
-    format: str = "markdown"  # "markdown" | "json"
-    content: str | dict[str, Any] = Field(
-        ..., description="Extracted text or structured content"
-    )
     metadata: ParsedDocumentMetadata
+    content: str  # Markdown or text
+    raw_structure: Optional[dict] = None  # JSON for spreadsheets/tables
+    chunk_ids: list[str] = Field(default_factory=list)

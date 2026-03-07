@@ -3,7 +3,7 @@ API endpoints for managing skills (personas).
 """
 
 from fastapi import APIRouter, HTTPException, Depends
-from typing import List
+from typing import List, Optional
 
 from app.models.skill import Skill, SkillCreate, SkillUpdate
 from app.agent.skills_service import get_skill_service

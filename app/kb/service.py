@@ -25,6 +25,8 @@ def _get_embeddings():
     return _get_embeddings._emb
 
 
+from typing import Optional
+
 class KnowledgeBaseService:
     """Single collection for MVP; persist to CHROMA_PERSIST_DIR."""
 
@@ -53,7 +55,7 @@ class KnowledgeBaseService:
         )
 
     def add_document(
-        self, parsed: ParsedDocument, document_id: str | None = None
+        self, parsed: ParsedDocument, document_id: Optional[str] = None
     ) -> str:
         """Ingest one parsed document into the KB; return document id."""
         content = (
@@ -87,7 +89,7 @@ class KnowledgeBaseService:
         self,
         task_id: str,
         version: int,
-        scenario_id: str | None,
+        scenario_id: Optional[str],
         report_json: dict,
     ) -> str:
         content = (

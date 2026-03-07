@@ -3,7 +3,7 @@ Skill / Persona model for assessment.
 Defines the role, focus, and system prompts for the AI agent.
 """
 
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -34,8 +34,8 @@ class SkillCreate(BaseModel):
 
 
 class SkillUpdate(BaseModel):
-    name: str | None = None
-    description: str | None = None
-    system_prompt: str | None = None
-    risk_focus: list[str] | None = None
-    compliance_frameworks: list[str] | None = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    system_prompt: Optional[str] = None
+    risk_focus: Optional[list[str]] = None
+    compliance_frameworks: Optional[list[str]] = None
