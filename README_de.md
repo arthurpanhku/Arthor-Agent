@@ -22,6 +22,12 @@
   <a href="docs/06-agent-integration.md"><img src="https://img.shields.io/badge/Agent-Integration-blueviolet" alt="Agent Integration"/></a>
 </p>
 
+<p align="center">
+  <a href="https://glama.ai/mcp/servers/arthurpanhku/arthor-agent">
+    <img width="380" height="200" src="https://glama.ai/mcp/servers/arthurpanhku/arthor-agent/badge" />
+  </a>
+</p>
+
 ---
 
 ## Was ist Arthor Agent?
