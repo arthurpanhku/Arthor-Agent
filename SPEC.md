@@ -1,4 +1,4 @@
-# Arthor Agent — Product Requirements Document (PRD) | 产品需求文档
+# DocSentinel — Product Requirements Document (PRD) | 产品需求文档
 
 |             |                         |
 | :---------- | :---------------------- |
@@ -36,11 +36,11 @@
 
 **English**
 
-This PRD is for the open-source "Arthor Agent" project. It defines business pain points, solution approach, system architecture, and product scope to serve as a single source of truth for subsequent design and development. The project aims to use an AI Agent to automate the review of and recommendations for security-related documents, forms, and reports, reduce the burden on enterprise security teams, and support integration with mainstream and local LLMs, multi-format file parsing, and extensible Skills and knowledge bases.
+This PRD is for the open-source "DocSentinel" project. It defines business pain points, solution approach, system architecture, and product scope to serve as a single source of truth for subsequent design and development. The project aims to use an AI Agent to automate the review of and recommendations for security-related documents, forms, and reports, reduce the burden on enterprise security teams, and support integration with mainstream and local LLMs, multi-format file parsing, and extensible Skills and knowledge bases.
 
 **中文**
 
-本 PRD 面向「Arthor Agent」开源项目，用于明确业务痛点、解决方案、系统架构与产品范围，为后续设计与开发提供统一依据。项目目标是通过 AI Agent 自动化完成安全评估相关文档/表格/报告的审阅与建议，减轻企业安全团队负担，并支持对接主流与本地大模型、多格式文件解析及可扩展的 Skill 与知识库。
+本 PRD 面向「DocSentinel」开源项目，用于明确业务痛点、解决方案、系统架构与产品范围，为后续设计与开发提供统一依据。项目目标是通过 AI Agent 自动化完成安全评估相关文档/表格/报告的审阅与建议，减轻企业安全团队负担，并支持对接主流与本地大模型、多格式文件解析及可扩展的 Skill 与知识库。
 
 ---
 
@@ -168,7 +168,7 @@ The system uses a layered design: **Access** (REST API / Web / CLI) → **Core**
                     └───────────────────────────┬─────────────────────────────┘
                                                 │
     ┌───────────────────────────────────────────▼───────────────────────────────────────────┐
-    │                         Arthor Agent Core | 核心                                      │
+    │                         DocSentinel Core | 核心                                      │
     │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  │
     │  │ Orchestrator│  │   Memory    │  │   Skills    │  │ KB (RAG)    │  │   Parser   │  │
     │  │  任务编排    │  │   记忆体     │  │   Skill 层  │  │   知识库     │  │  文件解析   │  │
@@ -326,7 +326,7 @@ This section defines security controls for the **system itself** (not the docume
 2.  **MVP Scope**: "One file type + Single KB + One Skill + 1 LLM" end-to-end loop. Then add AAD & ServiceNow.
 3.  **Enterprise Integration**: Align with IT on AAD registration and ServiceNow API access.
 4.  **Pilot**: Run with 1-2 teams to gather feedback.
-5.  **Open Source**: Release as "Arthor Agent" after MVP stabilization.
+5.  **Open Source**: Release as "DocSentinel" after MVP stabilization.
 
 ---
 

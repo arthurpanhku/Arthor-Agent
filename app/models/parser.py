@@ -4,7 +4,7 @@ Aligned with docs/03-assessment-report-and-skill-contract.md §2 Parser Output S
 """
 
 from datetime import datetime
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -13,12 +13,12 @@ class ParsedDocumentMetadata(BaseModel):
     filename: str
     type: Literal["pdf", "docx", "xlsx", "pptx", "txt", "md"]
     upload_time: datetime = Field(default_factory=datetime.utcnow)
-    scenario_id: Optional[str] = None
-    file_hash: Optional[str] = None
+    scenario_id: str | None = None
+    file_hash: str | None = None
 
 
 class ParsedDocument(BaseModel):
     metadata: ParsedDocumentMetadata
     content: str  # Markdown or text
-    raw_structure: Optional[dict] = None  # JSON for spreadsheets/tables
+    raw_structure: dict | None = None  # JSON for spreadsheets/tables
     chunk_ids: list[str] = Field(default_factory=list)

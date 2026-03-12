@@ -1,1 +1,1 @@
-# Arthor Agent — Application package
+# DocSentinel — Application package

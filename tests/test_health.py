@@ -14,7 +14,7 @@ def test_root_returns_service_info(client):
     r = client.get("/")
     assert r.status_code == 200
     data = r.json()
-    assert data.get("service") == "Arthor Agent"
+    assert data.get("service") == "DocSentinel"
     assert "api_docs" in data
     assert "health" in data
 

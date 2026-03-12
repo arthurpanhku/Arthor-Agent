@@ -1,4 +1,4 @@
-# Arthor Agent — Dependencies
+# DocSentinel — Dependencies
 # Python 3.9+ (3.10+ recommended for best ecosystem compatibility)
 
 # NumPy: pin <2 for compatibility with torch/sentence-transformers on Python 3.9

@@ -2,15 +2,15 @@
 API endpoints for managing skills (personas).
 """
 
-from fastapi import APIRouter, HTTPException, Depends
-from typing import List, Optional
 
-from app.models.skill import Skill, SkillCreate, SkillUpdate
+from fastapi import APIRouter, HTTPException
+
 from app.agent.skills_service import get_skill_service
+from app.models.skill import Skill, SkillCreate, SkillUpdate
 
 router = APIRouter()
 
-@router.get("/", response_model=List[Skill])
+@router.get("/", response_model=list[Skill])
 async def list_skills():
     """List all available skills (built-in + custom)."""
     service = get_skill_service()

@@ -121,7 +121,7 @@ Aligned with PRD Section 5.1.
 Current implementation structure:
 
 ```text
-Arthor-Agent/
+DocSentinel/
 ├── app/
 │   ├── api/                # FastAPI routes: health, assessments, kb
 │   ├── core/               # Configuration (pydantic-settings)

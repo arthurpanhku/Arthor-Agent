@@ -2,9 +2,7 @@
 Skills Management Service (InMemory / File based for now).
 """
 import json
-import os
 from pathlib import Path
-from typing import Dict, Optional
 
 from app.agent.skills_registry import get_builtin_skills
 from app.models.skill import Skill, SkillCreate, SkillUpdate
@@ -13,14 +11,14 @@ from app.models.skill import Skill, SkillCreate, SkillUpdate
 class SkillService:
     def __init__(self, storage_path: str = "./data/skills.json"):
         self.storage_path = Path(storage_path)
-        self.custom_skills: Dict[str, Skill] = {}
+        self.custom_skills: dict[str, Skill] = {}
         self._load_custom_skills()
 
     def _load_custom_skills(self):
         if not self.storage_path.exists():
             return
         try:
-            with open(self.storage_path, "r", encoding="utf-8") as f:
+            with open(self.storage_path, encoding="utf-8") as f:
                 data = json.load(f)
                 for item in data:
                     s = Skill(**item)
@@ -39,7 +37,7 @@ class SkillService:
         custom = list(self.custom_skills.values())
         return builtin + custom
 
-    def get_skill(self, skill_id: str) -> Optional[Skill]:
+    def get_skill(self, skill_id: str) -> Skill | None:
         if skill_id in self.custom_skills:
             return self.custom_skills[skill_id]
         for s in get_builtin_skills():
@@ -50,7 +48,7 @@ class SkillService:
     def create_skill(self, skill_in: SkillCreate) -> Skill:
         if self.get_skill(skill_in.id):
             raise ValueError(f"Skill with ID {skill_in.id} already exists.")
-        
+
         skill = Skill(
             id=skill_in.id,
             name=skill_in.name,
@@ -70,11 +68,11 @@ class SkillService:
             if self.get_skill(skill_id):
                 raise ValueError("Cannot modify built-in skills.")
             raise ValueError("Skill not found.")
-        
+
         current = self.custom_skills[skill_id]
         updated_data = skill_in.model_dump(exclude_unset=True)
         updated_skill = current.model_copy(update=updated_data)
-        
+
         self.custom_skills[skill_id] = updated_skill
         self._save_custom_skills()
         return updated_skill

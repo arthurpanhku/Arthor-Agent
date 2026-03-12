@@ -82,7 +82,7 @@ def test_submit_assessment_with_txt_file(client):
 
 def test_submit_assessment_with_skill(client):
     """POST /api/v1/assessments with skill_id passes it to orchestrator."""
-    
+
     # Mock to capture arguments
     captured_args = {}
     async def mock_run_assessment(
@@ -98,11 +98,11 @@ def test_submit_assessment_with_skill(client):
     ):
         files = [("files", ("sample.txt", b"Content", "text/plain"))]
         client.post(
-            "/api/v1/assessments", 
-            data={"skill_id": "iso-27001-auditor"}, 
+            "/api/v1/assessments",
+            data={"skill_id": "iso-27001-auditor"},
             files=files
         )
-        
+
     assert captured_args.get("skill_id") == "iso-27001-auditor"
 
 
@@ -119,8 +119,8 @@ def test_review_comment_and_activity_flow(client):
     ):
         files = [("files", ("sample.txt", b"Content", "text/plain"))]
         r = client.post(
-            "/api/v1/assessments", 
-            data={"collaborative_mode": True}, 
+            "/api/v1/assessments",
+            data={"collaborative_mode": True},
             files=files
         )
         created = r.json()
@@ -147,7 +147,7 @@ def test_review_comment_and_activity_flow(client):
     data = r_final.json()
     assert data["status"] == "approved"
     assert data["assignee"] == "manager"
-    
+
     # Check activity log
     r_act = client.get(f"/api/v1/assessments/{task_id}/activity")
     activity = r_act.json()

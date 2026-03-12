@@ -5,34 +5,34 @@
 </div>
 
 <p align="center">
-  <img src="docs/images/arthor-agent-mascot.png" width="200" alt="Arthor Agent mascot"/>
+  <img src="docs/images/docsentinel-mascot.png" width="200" alt="DocSentinel mascot"/>
 </p>
 
 <p align="center">
-  <strong>Arthor Agent</strong><br/>
+  <strong>DocSentinel</strong><br/>
   <em>Automated security assessment for documents and questionnaires</em>
 </p>
 
 <p align="center">
-  <a href="https://github.com/arthurpanhku/Arthor-Agent/releases"><img src="https://img.shields.io/github/v/release/arthurpanhku/Arthor-Agent?include_prereleases" alt="Latest release"/></a>
-  <a href="https://github.com/arthurpanhku/Arthor-Agent/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"/></a>
+  <a href="https://github.com/arthurpanhku/DocSentinel/releases"><img src="https://img.shields.io/github/v/release/arthurpanhku/DocSentinel?include_prereleases" alt="Latest release"/></a>
+  <a href="https://github.com/arthurpanhku/DocSentinel/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"/></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+"/></a>
-  <a href="https://github.com/arthurpanhku/Arthor-Agent"><img src="https://img.shields.io/badge/GitHub-arthurpanhku%2FArthor--Agent-24292e?logo=github" alt="GitHub repo"/></a>
+  <a href="https://github.com/arthurpanhku/DocSentinel"><img src="https://img.shields.io/badge/GitHub-arthurpanhku%2FDocSentinel--Agent-24292e?logo=github" alt="GitHub repo"/></a>
   <a href="docs/06-agent-integration.md"><img src="https://img.shields.io/badge/MCP-Ready-green?logo=anthropic" alt="MCP Ready"/></a>
   <a href="docs/06-agent-integration.md"><img src="https://img.shields.io/badge/Agent-Integration-blueviolet" alt="Agent Integration"/></a>
 </p>
 
 <p align="center">
-  <a href="https://glama.ai/mcp/servers/arthurpanhku/arthor-agent">
-    <img width="380" height="200" src="https://glama.ai/mcp/servers/arthurpanhku/arthor-agent/badge" />
+  <a href="https://glama.ai/mcp/servers/arthurpanhku/docsentinel">
+    <img width="380" height="200" src="https://glama.ai/mcp/servers/arthurpanhku/docsentinel/badge" />
   </a>
 </p>
 
 ---
 
-## What is Arthor Agent?
+## What is DocSentinel?
 
-**Arthor Agent** is an AI-powered assistant for security teams. It automates the review of security-related **documents, forms, and reports** (e.g. Security Questionnaires, design docs, compliance evidence), compares them against your policy and knowledge base, and produces **structured assessment reports** with risks, compliance gaps, and remediation suggestions.
+**DocSentinel** is an AI-powered assistant for security teams. It automates the review of security-related **documents, forms, and reports** (e.g. Security Questionnaires, design docs, compliance evidence), compares them against your policy and knowledge base, and produces **structured assessment reports** with risks, compliance gaps, and remediation suggestions.
 
 🚀 **Agent Ready**: Supports **Model Context Protocol (MCP)** to be used as a "skill" by OpenClaw, Claude Desktop, and other autonomous agents.
 
@@ -45,9 +45,9 @@ Ideal for enterprises that need to scale security assessments across many projec
 
 ---
 
-## Why Arthor Agent?
+## Why DocSentinel?
 
-| Pain Point                                                                                                                    | Arthor Agent Solution                                                                        |
+| Pain Point                                                                                                                    | DocSentinel Solution                                                                        |
 | :---------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
 | **Fragmented criteria**<br>Policies, standards, and precedents are scattered.                                                 | Single **knowledge base** ensures consistent findings and traceability.                      |
 | **Heavy questionnaire workflow**<br>Business fills form → Security reviews → Business adds evidence → Security reviews again. | **Automated first-pass** and gap analysis reduces manual back-and-forth rounds.              |
@@ -60,7 +60,7 @@ Ideal for enterprises that need to scale security assessments across many projec
 
 ## Architecture
 
-Arthor Agent is built around an **orchestrator** that coordinates parsing, the knowledge base (RAG), skills, and the LLM. You can use cloud or local LLMs and optional integrations (e.g. AAD, ServiceNow) as your environment requires.
+DocSentinel is built around an **orchestrator** that coordinates parsing, the knowledge base (RAG), skills, and the LLM. You can use cloud or local LLMs and optional integrations (e.g. AAD, ServiceNow) as your environment requires.
 
 ```mermaid
 flowchart TB
@@ -69,7 +69,7 @@ flowchart TB
     subgraph Access["Access Layer"]
         API["REST API / MCP"]
     end
-    subgraph Core["Arthor Agent Core"]
+    subgraph Core["DocSentinel Core"]
         Orch["Orchestrator"]
         Mem["Memory"]
         Skill["Skills"]
@@ -142,6 +142,36 @@ Upload policy documents to RAG. The agent cites these as evidence.
 
 ---
 
+## 🤖 Agent Integration (MCP)
+
+Connect DocSentinel to **Claude Desktop** or **Cursor** to use it as a tool.
+
+### Claude Desktop
+Add to your `claude_desktop_config.json`:
+```json
+{
+  "mcpServers": {
+    "docsentinel": {
+      "command": "/path/to/DocSentinel/.venv/bin/python",
+      "args": ["/path/to/DocSentinel/app/mcp_server.py"],
+      "env": { "OPENAI_API_KEY": "sk-..." }
+    }
+  }
+}
+```
+
+### Cursor
+1. Go to **Settings > Features > MCP**.
+2. Click **+ Add New MCP Server**.
+   - **Name**: `docsentinel`
+   - **Type**: `stdio`
+   - **Command**: `/path/to/DocSentinel/.venv/bin/python`
+   - **Args**: `/path/to/DocSentinel/app/mcp_server.py`
+
+*See full guide in [docs/06-agent-integration.md](docs/06-agent-integration.md).*
+
+---
+
 ## Quick Start
 
 ### Option A: One-Click Deployment (Recommended)
@@ -149,8 +179,8 @@ Upload policy documents to RAG. The agent cites these as evidence.
 Run the deployment script to start the full stack (API + Dashboard + Vector DB + optional Ollama).
 
 ```bash
-git clone https://github.com/arthurpanhku/Arthor-Agent.git
-cd Arthor-Agent
+git clone https://github.com/arthurpanhku/DocSentinel.git
+cd DocSentinel
 chmod +x deploy.sh
 ./deploy.sh
 ```
@@ -163,8 +193,8 @@ chmod +x deploy.sh
 **Prerequisites**: **Python 3.10+**. Optional: [Ollama](https://ollama.ai) (`ollama pull llama2`).
 
 ```bash
-git clone https://github.com/arthurpanhku/Arthor-Agent.git
-cd Arthor-Agent
+git clone https://github.com/arthurpanhku/DocSentinel.git
+cd DocSentinel
 python3 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -208,7 +238,7 @@ curl -X POST "http://localhost:8000/api/v1/kb/query" \
 ## Project layout
 
 ```text
-Arthor-Agent/
+DocSentinel/
 ├── app/                  # Application code
 │   ├── api/              # REST routes: assessments, KB, health
 │   ├── agent/            # Orchestration & Assessment pipeline
@@ -263,7 +293,7 @@ Arthor-Agent/
 
 -   **[ARCHITECTURE.md](./ARCHITECTURE.md)** — System architecture: high-level diagram, Mermaid views, component design, data flow, security.
 -   **[SPEC.md](./SPEC.md)** — Product requirements: problem statement, solution, features, security controls.
--   **[CHANGELOG.md](./CHANGELOG.md)** — Version history; [Releases](https://github.com/arthurpanhku/Arthor-Agent/releases).
+-   **[CHANGELOG.md](./CHANGELOG.md)** — Version history; [Releases](https://github.com/arthurpanhku/DocSentinel/releases).
 -   **Design docs** [docs/](./docs/)：Architecture, API spec (OpenAPI), contracts, integration guides (AAD, ServiceNow), deployment runbook. Q1 Launch Checklist: [docs/LAUNCH-CHECKLIST.md](./docs/LAUNCH-CHECKLIST.md).
 
 ---
@@ -298,7 +328,7 @@ Issues and Pull Requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING
 
 🤖 **AI-Assisted Contribution**: We encourage using AI tools to contribute! Check out [CONTRIBUTING_WITH_AI.md](CONTRIBUTING_WITH_AI.md) for best practices.
 
-📜 **Submit a Skill Template**: Have a great security persona? Submit a [Skill Template](https://github.com/arthurpanhku/Arthor-Agent/issues/new?template=new_skill_template.md) or add it to `examples/templates/`. We welcome real-world (sanitized) security questionnaires to improve our templates!
+📜 **Submit a Skill Template**: Have a great security persona? Submit a [Skill Template](https://github.com/arthurpanhku/DocSentinel/issues/new?template=new_skill_template.md) or add it to `examples/templates/`. We welcome real-world (sanitized) security questionnaires to improve our templates!
 
 ---
 
@@ -317,14 +347,14 @@ This project is licensed under the **MIT License** — see the [LICENSE](./LICEN
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=arthurpanhku/Arthor-Agent&type=Date)](https://star-history.com/#arthurpanhku/Arthor-Agent&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=arthurpanhku/DocSentinel&type=Date)](https://star-history.com/#arthurpanhku/DocSentinel&Date)
 
 ---
 
 ## Author and links
 
 -   **Author**: PAN CHAO (Arthur Pan)
--   **Repository**: [github.com/arthurpanhku/Arthor-Agent](https://github.com/arthurpanhku/Arthor-Agent)
+-   **Repository**: [github.com/arthurpanhku/DocSentinel](https://github.com/arthurpanhku/DocSentinel)
 -   **SPEC and design docs**: See links above.
 
-If you use Arthor Agent in your organization or contribute back, we’d love to hear from you (e.g. via GitHub Discussions or Issues).
+If you use DocSentinel in your organization or contribute back, we’d love to hear from you (e.g. via GitHub Discussions or Issues).

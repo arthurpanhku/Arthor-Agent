@@ -1,8 +1,8 @@
 # Security Policy | 安全策略
 
-This document covers vulnerability disclosure and security-related practices for the **Arthor Agent** project. It aligns with [**PRD §7.2 Security Requirements and Controls**](./SPEC.md).
+This document covers vulnerability disclosure and security-related practices for the **DocSentinel** project. It aligns with [**PRD §7.2 Security Requirements and Controls**](./SPEC.md).
 
-本文档涵盖 **Arthor Agent** 项目的漏洞披露与安全实践，遵循 [**PRD §7.2 安全需求与控制**](./SPEC.md)。
+本文档涵盖 **DocSentinel** 项目的漏洞披露与安全实践，遵循 [**PRD §7.2 安全需求与控制**](./SPEC.md)。
 
 ---
 

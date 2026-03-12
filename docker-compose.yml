@@ -1,4 +1,4 @@
-# Arthor Agent — Docker Compose
+# DocSentinel — Docker Compose
 #
 # API only (use OpenAI or Ollama on host):
 #   docker compose up -d
@@ -25,7 +25,7 @@ services:
       - UPLOAD_MAX_FILE_SIZE_MB=50
       - UPLOAD_MAX_FILES=10
     volumes:
-      - arthor-data:/data
+      - docsentinel-data:/data
 
   frontend:
     build: 
@@ -39,4 +39,4 @@ services:
       - app
 
 volumes:
-  arthor-data:
+  docsentinel-data:

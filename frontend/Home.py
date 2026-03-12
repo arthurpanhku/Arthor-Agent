@@ -5,15 +5,15 @@ from utils import ApiClient
 
 # Page Config
 st.set_page_config(
-    page_title="Arthor Agent Dashboard",
+    page_title="DocSentinel Dashboard",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # Sidebar
-st.sidebar.image("frontend/assets/arthor-architect.png", width=180)
-st.sidebar.title("Arthor Agent")
+st.sidebar.image("frontend/assets/docsentinel-architect.png", width=180)
+st.sidebar.title("DocSentinel")
 st.sidebar.markdown("---")
 
 # API Configuration
@@ -35,20 +35,20 @@ with st.sidebar.expander("⚙️ Configuration", expanded=True):
 st.sidebar.markdown("---")
 st.sidebar.info(
     """
-    **Arthor Agent**
+    **DocSentinel**
     Automated Security Assessment Platform.
 
-    [GitHub Repo](https://github.com/arthurpanhku/Arthor-Agent)
+    [GitHub Repo](https://github.com/arthurpanhku/DocSentinel)
     """
 )
 
 # Main Content
 c1, c2 = st.columns([1, 4])
 with c1:
-    st.image("frontend/assets/arthor-architect.png", width=150)
+    st.image("frontend/assets/docsentinel-architect.png", width=150)
 with c2:
     st.title("Security Operations Dashboard")
-    st.caption("Powered by Arthor Architect - Your AI Security Partner")
+    st.caption("Powered by DocSentinel Architect - Your AI Security Partner")
 
 st.markdown("---")
 

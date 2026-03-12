@@ -1,4 +1,4 @@
-# Arthor Agent v0.1.0 — Release notes
+# DocSentinel v0.1.0 — Release notes
 
 **Release title (GitHub)**：`v0.1.0` 或 `v0.1.0: First release — Assessment API, RAG, Docker`
 
@@ -11,7 +11,7 @@ Copy the content below into GitHub → Releases → Draft a new release → choo
 
 ## 中文
 
-这是 **Arthor Agent** 的首个正式版本，面向安全团队的 AI 评估助手：上传文档与问卷，结合知识库与策略，产出结构化评估报告（风险、合规差距、整改建议）。
+这是 **DocSentinel** 的首个正式版本，面向安全团队的 AI 评估助手：上传文档与问卷，结合知识库与策略，产出结构化评估报告（风险、合规差距、整改建议）。
 
 ### 本版本包含
 
@@ -29,14 +29,14 @@ Copy the content below into GitHub → Releases → Draft a new release → choo
 2. 解压到本地目录。
 3. **Docker 方式**（推荐）：
    ```bash
-   cd Arthor-Agent-0.1.0   # 或你解压后的目录名
+   cd DocSentinel-0.1.0   # 或你解压后的目录名
    docker compose up -d
    # 浏览器打开 http://localhost:8000/docs
    docker compose exec ollama ollama pull llama2
    ```
 4. **Python 方式**：需 Python 3.10+，解压后执行：
    ```bash
-   cd Arthor-Agent-0.1.0
+   cd DocSentinel-0.1.0
    python3 -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
    cp .env.example .env
@@ -48,13 +48,13 @@ Copy the content below into GitHub → Releases → Draft a new release → choo
 - 当前任务状态为内存存储（MVP），生产环境建议替换为 DB/Redis。
 - AAD、ServiceNow 等集成在规划中，详见 SPEC 与 `docs/04-integration-guide.md`。
 
-完整变更见 [CHANGELOG.md](https://github.com/arthurpanhku/Arthor-Agent/blob/main/CHANGELOG.md)。
+完整变更见 [CHANGELOG.md](https://github.com/arthurpanhku/DocSentinel/blob/main/CHANGELOG.md)。
 
 ---
 
 ## English
 
-This is the **first official release** of **Arthor Agent**, an AI-powered assistant for security teams: upload documents and questionnaires, compare against your knowledge base and policies, and get structured assessment reports (risks, compliance gaps, remediations).
+This is the **first official release** of **DocSentinel**, an AI-powered assistant for security teams: upload documents and questionnaires, compare against your knowledge base and policies, and get structured assessment reports (risks, compliance gaps, remediations).
 
 ### What’s in this release
 
@@ -72,14 +72,14 @@ This is the **first official release** of **Arthor Agent**, an AI-powered assist
 2. Extract to a local folder.
 3. **Docker** (recommended):
    ```bash
-   cd Arthor-Agent-0.1.0   # or your extracted folder name
+   cd DocSentinel-0.1.0   # or your extracted folder name
    docker compose up -d
    # Open http://localhost:8000/docs in your browser
    docker compose exec ollama ollama pull llama2
    ```
 4. **Python**: Requires Python 3.10+. After extracting:
    ```bash
-   cd Arthor-Agent-0.1.0
+   cd DocSentinel-0.1.0
    python3 -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
    cp .env.example .env
@@ -91,4 +91,4 @@ This is the **first official release** of **Arthor Agent**, an AI-powered assist
 - Task store is in-memory (MVP); use a DB/Redis for production.
 - AAD and ServiceNow integrations are planned; see SPEC and `docs/04-integration-guide.md`.
 
-Full changelog: [CHANGELOG.md](https://github.com/arthurpanhku/Arthor-Agent/blob/main/CHANGELOG.md).
+Full changelog: [CHANGELOG.md](https://github.com/arthurpanhku/DocSentinel/blob/main/CHANGELOG.md).

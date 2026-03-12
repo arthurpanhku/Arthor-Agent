@@ -25,7 +25,7 @@ try:
     skill_options = {s["name"]: s["id"] for s in skills}
     selected_skill_name = st.sidebar.selectbox("Assessor Persona", list(skill_options.keys()))
     selected_skill_id = skill_options[selected_skill_name]
-    
+
     # Show skill details
     current_skill = next((s for s in skills if s["id"] == selected_skill_id), None)
     if current_skill:

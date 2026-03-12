@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Arthor Agent are documented here.
+All notable changes to DocSentinel are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
@@ -97,6 +97,6 @@ This release marks a significant milestone with **Skill Management**, **Template
 - **CI/CD**: Updated GitHub Actions workflow to include linting steps.
 - **Project Structure**: Migrated `pytest.ini` to `pyproject.toml`.
 
-[0.3.0]: https://github.com/arthurpanhku/Arthor-Agent/releases/tag/v0.3.0
-[0.2.0]: https://github.com/arthurpanhku/Arthor-Agent/releases/tag/v0.2.0
-[0.1.0]: https://github.com/arthurpanhku/Arthor-Agent/releases/tag/v0.1.0
+[0.3.0]: https://github.com/arthurpanhku/DocSentinel/releases/tag/v0.3.0
+[0.2.0]: https://github.com/arthurpanhku/DocSentinel/releases/tag/v0.2.0
+[0.1.0]: https://github.com/arthurpanhku/DocSentinel/releases/tag/v0.1.0

@@ -1,16 +1,16 @@
 # Agent Integration Guide | 代理集成指南
 
-Arthor-Agent supports the **Model Context Protocol (MCP)**, allowing it to be used as a "skill" or "tool" by other autonomous agents (like Claude Desktop, OpenClaw, or LangChain agents).
+DocSentinel supports the **Model Context Protocol (MCP)**, allowing it to be used as a "skill" or "tool" by other autonomous agents (like Claude Desktop, OpenClaw, or LangChain agents).
 
-Arthor-Agent 支持 **Model Context Protocol (MCP)**，使其能够作为“技能”或“工具”被其他自主智能体（如 Claude Desktop、OpenClaw 或 LangChain Agent）调用。
+DocSentinel 支持 **Model Context Protocol (MCP)**，使其能够作为“技能”或“工具”被其他自主智能体（如 Claude Desktop、OpenClaw 或 LangChain Agent）调用。
 
 ---
 
 ## 🔌 Model Context Protocol (MCP)
 
-Arthor-Agent exposes its core capabilities (document assessment and knowledge base retrieval) as an MCP Server.
+DocSentinel exposes its core capabilities (document assessment and knowledge base retrieval) as an MCP Server.
 
-Arthor-Agent 将其核心能力（文档评估和知识库检索）作为 MCP Server 对外暴露。
+DocSentinel 将其核心能力（文档评估和知识库检索）作为 MCP Server 对外暴露。
 
 ### Available Tools | 可用工具
 
@@ -21,10 +21,10 @@ Arthor-Agent 将其核心能力（文档评估和知识库检索）作为 MCP Se
 
 ### 🚀 How to Use with Claude Desktop | 在 Claude Desktop 中使用
 
-1.  **Install Arthor-Agent**:
-    **安装 Arthor-Agent**：
+1.  **Install DocSentinel**:
+    **安装 DocSentinel**：
     ```bash
-    pip install arthor-agent
+    pip install docsentinel
     # or install from source
     # 或从源码安装
     pip install -e .
@@ -39,8 +39,8 @@ Arthor-Agent 将其核心能力（文档评估和知识库检索）作为 MCP Se
     ```json
     {
       "mcpServers": {
-        "arthor-security": {
-          "command": "arthor-mcp",
+        "docsentinel-security": {
+          "command": "docsentinel-mcp",
           "args": [],
           "env": {
             "OPENAI_API_KEY": "sk-...",
@@ -52,16 +52,16 @@ Arthor-Agent 将其核心能力（文档评估和知识库检索）作为 MCP Se
     ```
 
 3.  **Restart Claude Desktop**. You can now ask Claude:
-    > "Check the security design document at `/Users/me/docs/design.pdf` for compliance risks using Arthor."
+    > "Check the security design document at `/Users/me/docs/design.pdf` for compliance risks using DocSentinel."
 
     **重启 Claude Desktop**。现在你可以问 Claude：
-    > "Check the security design document at `/Users/me/docs/design.pdf` for compliance risks using Arthor."
+    > "Check the security design document at `/Users/me/docs/design.pdf` for compliance risks using DocSentinel."
 
 ### 🤖 How to Use with OpenClaw / LangChain | 在 OpenClaw / LangChain 中使用
 
-Since Arthor-Agent implements the standard MCP protocol, any MCP-compliant client can connect to it.
+Since DocSentinel implements the standard MCP protocol, any MCP-compliant client can connect to it.
 
-由于 Arthor-Agent 实现了标准的 MCP 协议，任何兼容 MCP 的客户端均可连接。
+由于 DocSentinel 实现了标准的 MCP 协议，任何兼容 MCP 的客户端均可连接。
 
 **Example (Python Client):**
 
@@ -70,7 +70,7 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 server_params = StdioServerParameters(
-    command="arthor-mcp",
+    command="docsentinel-mcp",
     args=[],
     env={"OPENAI_API_KEY": "sk-..."}
 )

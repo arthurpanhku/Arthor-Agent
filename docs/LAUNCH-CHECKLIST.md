@@ -1,6 +1,6 @@
 # Q1 Community Launch Checklist | 社区发布清单
 
-Use this list when you’re ready to announce Arthor Agent (e.g. after v0.1.0 release).
+Use this list when you’re ready to announce DocSentinel (e.g. after v0.1.0 release).
 
 ---
 
@@ -17,7 +17,7 @@ Use this list when you’re ready to announce Arthor Agent (e.g. after v0.1.0 re
 
 ### Hacker News
 
--   **Title**: `Show HN: Arthor Agent – open-source AI for security questionnaire assessment`
+-   **Title**: `Show HN: DocSentinel – open-source AI for security questionnaire assessment`
 -   **Timing**: Tuesday–Thursday, morning US Eastern.
 -   **Content**: Short pitch (What/Why/How), link to repo, no paywall.
 -   **Action**: Monitor thread for 1–2 hours.

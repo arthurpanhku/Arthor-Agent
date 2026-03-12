@@ -5,34 +5,34 @@
 </div>
 
 <p align="center">
-  <img src="docs/images/arthor-agent-mascot.png" width="200" alt="Arthor Agent mascot"/>
+  <img src="docs/images/docsentinel-mascot.png" width="200" alt="DocSentinel mascot"/>
 </p>
 
 <p align="center">
-  <strong>Arthor Agent</strong><br/>
+  <strong>DocSentinel</strong><br/>
   <em>面向文档与问卷的自动化安全评估</em>
 </p>
 
 <p align="center">
-  <a href="https://github.com/arthurpanhku/Arthor-Agent/releases"><img src="https://img.shields.io/github/v/release/arthurpanhku/Arthor-Agent?include_prereleases" alt="Latest release"/></a>
-  <a href="https://github.com/arthurpanhku/Arthor-Agent/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"/></a>
+  <a href="https://github.com/arthurpanhku/DocSentinel/releases"><img src="https://img.shields.io/github/v/release/arthurpanhku/DocSentinel?include_prereleases" alt="Latest release"/></a>
+  <a href="https://github.com/arthurpanhku/DocSentinel/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"/></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+"/></a>
-  <a href="https://github.com/arthurpanhku/Arthor-Agent"><img src="https://img.shields.io/badge/GitHub-arthurpanhku%2FArthor--Agent-24292e?logo=github" alt="GitHub repo"/></a>
+  <a href="https://github.com/arthurpanhku/DocSentinel"><img src="https://img.shields.io/badge/GitHub-arthurpanhku%2FDocSentinel--Agent-24292e?logo=github" alt="GitHub repo"/></a>
   <a href="docs/06-agent-integration.md"><img src="https://img.shields.io/badge/MCP-Ready-green?logo=anthropic" alt="MCP Ready"/></a>
   <a href="docs/06-agent-integration.md"><img src="https://img.shields.io/badge/Agent-Integration-blueviolet" alt="Agent Integration"/></a>
 </p>
 
 <p align="center">
-  <a href="https://glama.ai/mcp/servers/arthurpanhku/arthor-agent">
-    <img width="380" height="200" src="https://glama.ai/mcp/servers/arthurpanhku/arthor-agent/badge" />
+  <a href="https://glama.ai/mcp/servers/arthurpanhku/docsentinel">
+    <img width="380" height="200" src="https://glama.ai/mcp/servers/arthurpanhku/docsentinel/badge" />
   </a>
 </p>
 
 ---
 
-## Arthor Agent 是什么？
+## DocSentinel 是什么？
 
-**Arthor Agent** 是面向安全团队的 AI 助手。它自动化审阅与安全相关的**文档、表格和报告**（如安全问卷、设计文档、合规证据），结合策略与知识库进行比对，并产出**结构化评估报告**，包含风险项、合规差距与整改建议。
+**DocSentinel** 是面向安全团队的 AI 助手。它自动化审阅与安全相关的**文档、表格和报告**（如安全问卷、设计文档、合规证据），结合策略与知识库进行比对，并产出**结构化评估报告**，包含风险项、合规差距与整改建议。
 
 🚀 **Agent Ready**: 支持 **Model Context Protocol (MCP)**，可作为“技能”被 OpenClaw、Claude Desktop 等智能体直接调用。
 
@@ -45,9 +45,9 @@
 
 ---
 
-## 为什么用 Arthor Agent？
+## 为什么用 DocSentinel？
 
-| 痛点 (Pain Point)                                                 | Arthor Agent 的应对 (Solution)                     |
+| 痛点 (Pain Point)                                                 | DocSentinel 的应对 (Solution)                     |
 | :---------------------------------------------------------------- | :------------------------------------------------- |
 | **评估依据分散**<br>策略、标准与先例散落各处。                    | 统一**知识库**承载策略与控制项，评估一致、可追溯。 |
 | **问卷流程繁重**<br>业务填表 → 安全评估 → 业务补证据 → 安全再审。 | **自动化初评**与差距分析，减少多轮往返。           |
@@ -60,7 +60,7 @@
 
 ## 架构
 
-Arthor Agent 以**编排器**为核心，协调解析、知识库（RAG）、技能（如问卷与策略比对）与 LLM。可按环境选用云端或本地大模型，以及可选集成（如 AAD、ServiceNow）。
+DocSentinel 以**编排器**为核心，协调解析、知识库（RAG）、技能（如问卷与策略比对）与 LLM。可按环境选用云端或本地大模型，以及可选集成（如 AAD、ServiceNow）。
 
 ```mermaid
 flowchart TB
@@ -69,7 +69,7 @@ flowchart TB
     subgraph Access["Access Layer | 接入层"]
         API["REST API / MCP"]
     end
-    subgraph Core["Arthor Agent Core | 核心"]
+    subgraph Core["DocSentinel Core | 核心"]
         Orch["Orchestrator | 编排"]
         Mem["Memory | 记忆"]
         Skill["Skills | 技能"]
@@ -142,6 +142,36 @@ flowchart TB
 
 ---
 
+## 🤖 Agent 集成 (MCP)
+
+将 DocSentinel 连接到 **Claude Desktop** 或 **Cursor**，作为工具使用。
+
+### Claude Desktop
+编辑 `claude_desktop_config.json`：
+```json
+{
+  "mcpServers": {
+    "docsentinel": {
+      "command": "/path/to/DocSentinel/.venv/bin/python",
+      "args": ["/path/to/DocSentinel/app/mcp_server.py"],
+      "env": { "OPENAI_API_KEY": "sk-..." }
+    }
+  }
+}
+```
+
+### Cursor
+1. 进入 **Settings > Features > MCP**。
+2. 点击 **+ Add New MCP Server**。
+   - **Name**: `docsentinel`
+   - **Type**: `stdio`
+   - **Command**: `/path/to/DocSentinel/.venv/bin/python`
+   - **Args**: `/path/to/DocSentinel/app/mcp_server.py`
+
+*详细指南见 [docs/06-agent-integration.md](docs/06-agent-integration.md)。*
+
+---
+
 ## 快速开始
 
 ### 方式 A: 一键部署（推荐）
@@ -149,8 +179,8 @@ flowchart TB
 运行部署脚本以启动全栈服务（API + 仪表盘 + 向量库 + 可选 Ollama）。
 
 ```bash
-git clone https://github.com/arthurpanhku/Arthor-Agent.git
-cd Arthor-Agent
+git clone https://github.com/arthurpanhku/DocSentinel.git
+cd DocSentinel
 chmod +x deploy.sh
 ./deploy.sh
 ```
@@ -163,8 +193,8 @@ chmod +x deploy.sh
 **前置条件**: **Python 3.10+**. 可选: [Ollama](https://ollama.ai) (`ollama pull llama2`).
 
 ```bash
-git clone https://github.com/arthurpanhku/Arthor-Agent.git
-cd Arthor-Agent
+git clone https://github.com/arthurpanhku/DocSentinel.git
+cd DocSentinel
 python3 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -207,7 +237,7 @@ curl -X POST "http://localhost:8000/api/v1/kb/query" \
 ## 项目结构
 
 ```text
-Arthor-Agent/
+DocSentinel/
 ├── app/                  # 应用代码
 │   ├── api/              # REST 路由：评估、知识库、健康检查
 │   ├── agent/            # 编排与评估流水线
@@ -297,7 +327,7 @@ pytest tests/test_skills_api.py
 
 🤖 **AI 辅助贡献**：我们也鼓励使用 AI 工具参与贡献！请查看 [CONTRIBUTING_WITH_AI.md](CONTRIBUTING_WITH_AI.md) 获取最佳实践指南。
 
-📜 **贡献技能模板**：有好的安全评估角色？欢迎提交 [技能模板 Issue](https://github.com/arthurpanhku/Arthor-Agent/issues/new?template=new_skill_template.md) 或直接添加到 `examples/templates/`。特别欢迎脱敏后的真实安全问卷样例，帮助我们完善模板！
+📜 **贡献技能模板**：有好的安全评估角色？欢迎提交 [技能模板 Issue](https://github.com/arthurpanhku/DocSentinel/issues/new?template=new_skill_template.md) 或直接添加到 `examples/templates/`。特别欢迎脱敏后的真实安全问卷样例，帮助我们完善模板！
 
 ---
 
@@ -316,14 +346,14 @@ pytest tests/test_skills_api.py
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=arthurpanhku/Arthor-Agent&type=Date)](https://star-history.com/#arthurpanhku/Arthor-Agent&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=arthurpanhku/DocSentinel&type=Date)](https://star-history.com/#arthurpanhku/DocSentinel&Date)
 
 ---
 
 ## 作者与链接
 
 -   **作者**: PAN CHAO (Arthur Pan)
--   **仓库**: [github.com/arthurpanhku/Arthor-Agent](https://github.com/arthurpanhku/Arthor-Agent)
+-   **仓库**: [github.com/arthurpanhku/DocSentinel](https://github.com/arthurpanhku/DocSentinel)
 -   **规格与设计文档**: 见上文链接。
 
-若你在组织中使用 Arthor Agent 或希望参与贡献，欢迎通过 GitHub Discussions 或 Issues 联系我们。
+若你在组织中使用 DocSentinel 或希望参与贡献，欢迎通过 GitHub Discussions 或 Issues 联系我们。

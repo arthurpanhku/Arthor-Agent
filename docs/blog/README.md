@@ -14,7 +14,7 @@ Q1 goal: publish 1–2 English posts to drive traffic and stars. Publish on Dev.
 1. **Problem**: Security teams drown in questionnaires and evidence; manual review doesn’t scale.
 2. **Approach**: One pipeline: upload docs → parse (PDF/Word/Excel) → RAG over policy KB → LLM produces structured report (risks, gaps, remediations).
 3. **Tech**: FastAPI, Chroma, LangChain-style flow, OpenAI or Ollama. Why we support local LLM (privacy, air-gap).
-4. **Open source**: Arthor Agent, MIT. Quick start with Docker; link to repo and SPEC.
+4. **Open source**: DocSentinel, MIT. Quick start with Docker; link to repo and SPEC.
 5. **What’s next**: More skills, AAD/SSO, ServiceNow. Invite contributions.
 
 **CTA**: Star the repo, try `docker compose up`, open an issue for your use case.
@@ -31,7 +31,7 @@ Q1 goal: publish 1–2 English posts to drive traffic and stars. Publish on Dev.
 
 **Outline**:
 1. **Why local**: Sensitive questionnaires and design docs; no data leaves your network.
-2. **Stack**: Arthor Agent + Ollama; Docker Compose one-command run.
+2. **Stack**: DocSentinel + Ollama; Docker Compose one-command run.
 3. **Steps**: Clone → `docker compose up` → `ollama pull llama2` → upload a PDF via `/docs` or curl → get JSON report.
 4. **Trade-offs**: Local model vs cloud (speed, quality, cost). When to use which.
 5. **Link**: Repo, Quick Start, CHANGELOG.

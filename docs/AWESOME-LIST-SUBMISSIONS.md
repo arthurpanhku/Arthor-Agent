@@ -13,7 +13,7 @@ Since I cannot directly submit Pull Requests to external repositories on your be
 
 **Copy & Paste this line**:
 ```markdown
-- [Arthor-Agent](https://github.com/arthurpanhku/Arthor-Agent) - AI security assessment agent that provides document review and policy retrieval tools via MCP.
+- [DocSentinel](https://github.com/arthurpanhku/DocSentinel) - AI security assessment agent that provides document review and policy retrieval tools via MCP.
 ```
 
 ---
@@ -25,7 +25,7 @@ Since I cannot directly submit Pull Requests to external repositories on your be
 
 **Copy & Paste this line**:
 ```markdown
-* [Arthor-Agent](https://github.com/arthurpanhku/Arthor-Agent) - Automated security assessment for documents (PDF/Word) and questionnaires using LLMs and RAG.
+* [DocSentinel](https://github.com/arthurpanhku/DocSentinel) - Automated security assessment for documents (PDF/Word) and questionnaires using LLMs and RAG.
 ```
 
 ---
@@ -37,7 +37,7 @@ Since I cannot directly submit Pull Requests to external repositories on your be
 
 **Copy & Paste this line**:
 ```markdown
-- [Arthor-Agent](https://github.com/arthurpanhku/Arthor-Agent) - Security assessment agent built with LangChain, supporting RAG, local LLMs (Ollama), and MCP integration.
+- [DocSentinel](https://github.com/arthurpanhku/DocSentinel) - Security assessment agent built with LangChain, supporting RAG, local LLMs (Ollama), and MCP integration.
 ```
 
 ---
@@ -49,7 +49,7 @@ Since I cannot directly submit Pull Requests to external repositories on your be
 
 **Copy & Paste this line**:
 ```markdown
-- [Arthor-Agent](https://github.com/arthurpanhku/Arthor-Agent) - Security agent for document review that runs fully locally with Ollama and ChromaDB.
+- [DocSentinel](https://github.com/arthurpanhku/DocSentinel) - Security agent for document review that runs fully locally with Ollama and ChromaDB.
 ```
 
 ---
@@ -61,5 +61,5 @@ Since I cannot directly submit Pull Requests to external repositories on your be
 3.  Click the ✏️ (Edit) icon (this will automatically fork the repo if you haven't).
 4.  Find the correct section/category.
 5.  Paste the line (maintain alphabetical order if requested).
-6.  Scroll down, title your commit "Add Arthor-Agent", and click **Propose changes**.
+6.  Scroll down, title your commit "Add DocSentinel", and click **Propose changes**.
 7.  Click **Create pull request**.

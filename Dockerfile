@@ -1,4 +1,4 @@
-# Arthor Agent — API server
+# DocSentinel — API server
 # Python 3.11 slim; run with docker-compose for API + optional Ollama.
 FROM python:3.11-slim
 

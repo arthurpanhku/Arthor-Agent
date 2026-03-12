@@ -4,8 +4,8 @@ PRD §6; docs/02-api-specification.yaml.
 """
 
 from datetime import datetime, timezone
-from typing import Literal, Optional
-from uuid import UUID, uuid4
+from typing import Literal
+from uuid import uuid4
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
@@ -22,8 +22,8 @@ router = APIRouter(prefix="/assessments", tags=["assessments"])
 # --- Request Models ---
 class ReviewActionRequest(BaseModel):
     action: Literal["approve", "reject", "comment", "escalate"]
-    comment: Optional[str] = None
-    assignee: Optional[str] = None
+    comment: str | None = None
+    assignee: str | None = None
 
 
 class CommentRequest(BaseModel):
@@ -40,13 +40,12 @@ async def submit_assessment(
     files: list[UploadFile] = File(  # noqa: B008
         ..., description="Documents to assess"
     ),
-    scenario_id: Optional[str] = Form(None),
-    project_id: Optional[str] = Form(None),
-    skill_id: Optional[str] = Form(None),
+    scenario_id: str | None = Form(None),
+    project_id: str | None = Form(None),
+    skill_id: str | None = Form(None),
     collaborative_mode: bool = Form(True),
 ):
     """Submit an assessment task; returns task_id for polling."""
-    from app.core.config import settings
 
     if len(files) > settings.UPLOAD_MAX_FILES:
         raise HTTPException(413, f"Max {settings.UPLOAD_MAX_FILES} files allowed")
@@ -148,7 +147,7 @@ async def get_assessment_result(task_id: str):
     if task_id not in _tasks:
         raise HTTPException(404, "Task not found")
     task = _tasks[task_id]
-    
+
     # Map raw dict to Pydantic model
     return AssessmentTaskResult(
         task_id=task["task_id"],
@@ -167,16 +166,16 @@ async def get_assessment_result(task_id: str):
 async def review_assessment(task_id: str, body: ReviewActionRequest):
     if task_id not in _tasks:
         raise HTTPException(404, "Task not found")
-    
+
     task = _tasks[task_id]
     current_status = task["status"]
-    
+
     if current_status not in ["review_pending", "escalated"]:
         raise HTTPException(400, f"Cannot review task in status {current_status}")
 
     new_status = current_status
     activity_type = "review_action"
-    
+
     if body.action == "approve":
         new_status = "approved"
     elif body.action == "reject":
@@ -199,7 +198,7 @@ async def review_assessment(task_id: str, body: ReviewActionRequest):
         "comment": body.comment,
         "assignee": body.assignee
     })
-    
+
     # Add comment if provided
     if body.comment:
         task["comments"].append({
@@ -222,7 +221,7 @@ async def get_task_activity(task_id: str):
 async def add_comment(task_id: str, body: CommentRequest):
     if task_id not in _tasks:
         raise HTTPException(404, "Task not found")
-    
+
     comment_entry = {
         "content": body.content,
         "user_id": body.user_id,

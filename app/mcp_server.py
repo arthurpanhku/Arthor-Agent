@@ -10,7 +10,7 @@ from app.kb.service import KnowledgeBaseService
 from app.models.parser import ParsedDocument, ParsedDocumentMetadata
 
 # Initialize MCP Server
-mcp = FastMCP("Arthor-Agent")
+mcp = FastMCP("DocSentinel")
 
 # Initialize Services (Lazy loading to avoid startup overhead if not needed)
 _kb_service: KnowledgeBaseService | None = None

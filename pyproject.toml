@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "arthor-agent"
+name = "docsentinel"
 version = "0.2.0"
 description = "Automated security assessment for documents and questionnaires"
 readme = "README.md"
@@ -40,11 +40,11 @@ dependencies = [
 ]
 
 [project.scripts]
-arthor-mcp = "app.mcp_server:mcp.run"
+docsentinel-mcp = "app.mcp_server:mcp.run"
 
 [project.urls]
-"Homepage" = "https://github.com/arthurpanhku/Arthor-Agent"
-"Bug Tracker" = "https://github.com/arthurpanhku/Arthor-Agent/issues"
+"Homepage" = "https://github.com/arthurpanhku/DocSentinel"
+"Bug Tracker" = "https://github.com/arthurpanhku/DocSentinel/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]

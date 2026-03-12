@@ -24,7 +24,7 @@ tab_list, tab_create, tab_templates = st.tabs(["📜 Available Skills", "➕ Cre
 with tab_templates:
     st.header("Import Standard Templates")
     st.markdown("Select a pre-configured assessment persona to add to your skills library.")
-    
+
     # Define available templates (In a real app, this could scan the directory)
     TEMPLATES = {
         "soc2_type2": {
@@ -40,15 +40,15 @@ with tab_templates:
             "path": "examples/templates/architecture_review/skill.json"
         }
     }
-    
+
     selected_template_key = st.selectbox("Choose a Template", list(TEMPLATES.keys()), format_func=lambda x: TEMPLATES[x]["name"])
-    
+
     if selected_template_key:
         import json
         import os
-        
+
         template_info = TEMPLATES[selected_template_key]
-        
+
         # Check if path exists, if not try relative to CWD
         template_path = template_info["path"]
         if not os.path.exists(template_path):
@@ -56,11 +56,11 @@ with tab_templates:
              pass
 
         try:
-            with open(template_path, "r") as f:
+            with open(template_path) as f:
                 template_data = json.load(f)
-                
+
             st.json(template_data)
-            
+
             if st.button(f"Import '{template_info['name']}'"):
                 # Payload for API
                 payload = {
@@ -71,7 +71,7 @@ with tab_templates:
                     "risk_focus": template_data.get("risk_focus", []),
                     "compliance_frameworks": template_data.get("compliance_frameworks", []),
                 }
-                
+
                 try:
                     import requests
                     res = requests.post(f"{st.session_state.api_url}/api/v1/skills/", json=payload)
@@ -86,7 +86,7 @@ with tab_templates:
                         st.error(f"Error importing: {res.text}")
                 except Exception as e:
                     st.error(str(e))
-                    
+
         except FileNotFoundError:
             st.error(f"Template file not found at {template_path}")
 
@@ -108,7 +108,7 @@ with tab_list:
                     st.markdown("**Frameworks:**")
                     for f in skill.get("compliance_frameworks", []):
                         st.markdown(f"- {f}")
-                    
+
                     if not skill.get("is_builtin"):
                         if st.button("Delete", key=f"del_{skill['id']}", type="primary"):
                             try:
@@ -130,15 +130,15 @@ with tab_create:
         new_name = st.text_input("Display Name", placeholder="e.g. PCI DSS Auditor")
         new_desc = st.text_input("Description", placeholder="Short summary of this role")
         new_prompt = st.text_area(
-            "System Prompt", 
+            "System Prompt",
             placeholder="You are a PCI DSS Auditor. Focus on cardholder data environment...",
             height=150
         )
         new_focus = st.text_input("Risk Focus (comma separated)", placeholder="Encryption, Network Segmentation")
         new_frameworks = st.text_input("Frameworks (comma separated)", placeholder="PCI DSS v4.0")
-        
+
         submitted = st.form_submit_button("Create Skill")
-        
+
         if submitted:
             if not new_id or not new_name or not new_prompt:
                 st.error("ID, Name, and System Prompt are required.")

@@ -2,11 +2,9 @@
 Agent orchestration: multi-agent flow with citations, confidence, and history reuse.
 """
 
-import asyncio
 import uuid
-from uuid import UUID
 from datetime import datetime
-from typing import Optional
+from uuid import UUID
 
 from app.agent.skills_service import get_skill_service
 from app.core.config import settings
@@ -26,9 +24,9 @@ from app.models.parser import ParsedDocument
 async def run_assessment(
     task_id: UUID,
     parsed_documents: list[ParsedDocument],
-    scenario_id: Optional[str] = None,
-    project_id: Optional[str] = None,
-    skill_id: Optional[str] = None,
+    scenario_id: str | None = None,
+    project_id: str | None = None,
+    skill_id: str | None = None,
 ) -> AssessmentReport:
     # 1. Load Skill (Persona)
     skill_service = get_skill_service()
@@ -38,22 +36,22 @@ async def run_assessment(
         skill = skill_service.list_skills()[0]
 
     doc_context = _build_document_context(parsed_documents)
-    
+
     # Pass skill context to agents
     policy_chunks, history_chunks = _policy_and_history_agent(
-        doc_context["query_seed"], 
+        doc_context["query_seed"],
         skill_focus=skill.risk_focus
     )
-    
+
     evidence_context = _evidence_agent(parsed_documents, skill_focus=skill.risk_focus)
-    
+
     draft_raw = await _drafter_agent(
         doc_context["full_text"],
         policy_chunks,
         history_chunks,
         skill=skill
     )
-    
+
     reviewed_raw = await _reviewer_agent(
         draft_raw,
         evidence_context,
@@ -61,7 +59,7 @@ async def run_assessment(
         history_chunks,
         skill=skill
     )
-    
+
     report = await _parse_llm_output_to_report(
         raw=reviewed_raw,
         task_id=task_id,
@@ -83,14 +81,14 @@ def _build_document_context(parsed_documents: list[ParsedDocument]) -> dict:
     return {"full_text": combined_input, "query_seed": combined_input[:2000]}
 
 
-from typing import Optional
+
 
 def _policy_and_history_agent(
-    query_seed: str, 
-    skill_focus: Optional[list[str]] = None
+    query_seed: str,
+    skill_focus: list[str] | None = None
 ) -> tuple[list, list]:
     kb = KnowledgeBaseService()
-    
+
     # Enrich query with skill focus
     search_query = query_seed
     if skill_focus:
@@ -111,18 +109,18 @@ def _policy_and_history_agent(
 
 
 def _evidence_agent(
-    parsed_documents: list[ParsedDocument], 
-    skill_focus: Optional[list[str]] = None
+    parsed_documents: list[ParsedDocument],
+    skill_focus: list[str] | None = None
 ) -> str:
     evidence_lines: list[str] = []
-    
+
     # Default keywords
     keywords = ["password", "encrypt", "access", "token", "risk", "vulnerability"]
     # Add skill focus keywords
     if skill_focus:
         for f in skill_focus:
             keywords.extend(f.lower().split())
-    
+
     keywords = list(set(keywords))  # dedupe
 
     for d in parsed_documents:
@@ -143,17 +141,17 @@ async def _drafter_agent(
     full_text: str,
     policy_chunks: list,
     history_chunks: list,
-    skill: Optional[object] = None,
+    skill: object | None = None,
 ) -> str:
     policy_context = _format_chunks_with_ids(policy_chunks, prefix="POL")
     history_context = _format_chunks_with_ids(history_chunks, prefix="HIS")
-    
+
     base_prompt = (
         "You are DrafterAgent in a multi-agent security workflow. "
         "Create an assessment draft in JSON only with keys: summary, risk_items, "
         "compliance_gaps, remediations."
     )
-    
+
     # Inject Skill Persona
     if skill:
         base_prompt = (
@@ -177,17 +175,17 @@ async def _reviewer_agent(
     evidence_context: str,
     policy_chunks: list,
     history_chunks: list,
-    skill: Optional[object] = None,
+    skill: object | None = None,
 ) -> str:
     policy_context = _format_chunks_with_ids(policy_chunks, prefix="POL")
     history_context = _format_chunks_with_ids(history_chunks, prefix="HIS")
-    
+
     base_prompt = (
         "You are ReviewerAgent. Validate and improve the draft for consistency and "
         "hallucination resistance. Output JSON only with keys: summary, confidence, "
         "risk_items, compliance_gaps, remediations, sources."
     )
-    
+
     if skill:
         base_prompt = (
             f"You are a Reviewer for the {skill.name} persona. "
@@ -284,11 +282,10 @@ async def _parse_llm_output_to_report(
     task_id: UUID,
     policy_chunks: list,
     history_chunks: list,
-    scenario_id: Optional[str] = None,
-    project_id: Optional[str] = None,
+    scenario_id: str | None = None,
+    project_id: str | None = None,
 ) -> AssessmentReport:
     import json
-    import uuid
 
     # Attempt to extract JSON
     parsed = {}
@@ -306,7 +303,7 @@ async def _parse_llm_output_to_report(
 
     # Construct source citations
     citations = _derive_sources_from_chunks(policy_chunks, history_chunks)
-    
+
     # Merge LLM-generated sources if any
     llm_sources = parsed.get("sources", [])
     if isinstance(llm_sources, list):

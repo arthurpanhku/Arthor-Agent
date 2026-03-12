@@ -1,20 +1,20 @@
 # Marketing & Launch Checklist | 推广与发布清单
 
-This document outlines the strategy to increase visibility and adoption of **Arthor-Agent**.
+This document outlines the strategy to increase visibility and adoption of **DocSentinel**.
 
-本文档概述了提高 **Arthor-Agent** 曝光度与采用率的策略。
+本文档概述了提高 **DocSentinel** 曝光度与采用率的策略。
 
 ---
 
 ## 1. Distribution & Packaging | 分发与打包
 
-- [ ] **Publish to PyPI**: Ensure users can install via `pip install arthor-agent`.
+- [ ] **Publish to PyPI**: Ensure users can install via `pip install docsentinel`.
     ```bash
     pip install build twine
     python3 -m build
     python3 -m twine upload dist/*
     ```
-- [ ] **Docker Hub**: Push the Docker image to Docker Hub (e.g., `arthurpanhku/arthor-agent`).
+- [ ] **Docker Hub**: Push the Docker image to Docker Hub (e.g., `arthurpanhku/docsentinel`).
     - Add a `latest` tag and version tags (e.g., `v0.1.0`).
 
 ## 2. Ecosystem Integration | 生态集成
@@ -44,14 +44,14 @@ This document outlines the strategy to increase visibility and adoption of **Art
     - Publish on Medium, Dev.to, or personal blog.
     - Share the link on LinkedIn / Twitter.
 - [ ] **Tweet / X Thread**:
-    - "Just released Arthor-Agent: An open-source AI security assessor."
+    - "Just released DocSentinel: An open-source AI security assessor."
     - Highlight: MCP support, Local LLM (Ollama), RAG.
     - Tag: `@LangChainAI`, `@AnthropicAI` (for MCP), `@Ollama`.
 
 ## 5. Community Launch | 社区发布
 
 - [ ] **Hacker News (Show HN)**:
-    - Title: "Show HN: Arthor-Agent – Open Source AI Security Assessment (MCP support)"
+    - Title: "Show HN: DocSentinel – Open Source AI Security Assessment (MCP support)"
     - Post at peak time (e.g., weekday morning PT).
 - [ ] **Reddit**:
     - r/LocalLLaMA: Focus on "Run locally with Ollama".

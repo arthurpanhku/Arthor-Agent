@@ -1,10 +1,10 @@
 # System Architecture | 系统架构
 
 <p align="center">
-  <img src="docs/images/arthor-architect.png" width="200" alt="Arthor Architect"/>
+  <img src="docs/images/docsentinel-architect.png" width="200" alt="DocSentinel Architect"/>
 </p>
 
-**Arthor Agent** — System Architecture Document (open-source style)
+**DocSentinel** — System Architecture Document (open-source style)
 
 |                  |                                                                           |
 | :--------------- | :------------------------------------------------------------------------ |
@@ -17,7 +17,7 @@
 
 ## Overview | 概述
 
-Arthor Agent is an AI-powered system that automates security assessment of documents, questionnaires, and reports. This document describes the **system architecture**: high-level design, components, data flow, integrations, and deployment. For product goals and requirements, see [SPEC.md](./SPEC.md).
+DocSentinel is an AI-powered system that automates security assessment of documents, questionnaires, and reports. This document describes the **system architecture**: high-level design, components, data flow, integrations, and deployment. For product goals and requirements, see [SPEC.md](./SPEC.md).
 
 ---
 
@@ -32,7 +32,7 @@ Arthor Agent is an AI-powered system that automates security assessment of docum
 
 The system is organized in layers: **Access** → **Core (Orchestrator, Memory, Skills, Knowledge Base, Parser)** → **LLM abstraction** → **LLM backends**. External integrations (AAD, ServiceNow) connect at the access and orchestration boundaries.
 
-![Architecture overview](https://github.com/arthurpanhku/Arthor-Agent/raw/main/docs/images/architecture-overview.png)
+![Architecture overview](https://github.com/arthurpanhku/DocSentinel/raw/main/docs/images/architecture-overview.png)
 
 *Figure 1: Architecture overview (see repo `docs/images/architecture-overview.png`)*
 
@@ -47,7 +47,7 @@ flowchart TB
     subgraph Access["Access Layer"]
         API["REST API\n(FastAPI)"]
     end
-    subgraph Core["Arthor Agent Core"]
+    subgraph Core["DocSentinel Core"]
         Orch["Orchestrator"]
         Mem["Memory"]
         Skill["Skills"]
@@ -192,7 +192,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    subgraph Arthor["Arthor Agent"]
+    subgraph DocSentinel["DocSentinel"]
         API["API"]
         Orch["Orchestrator"]
     end
@@ -237,7 +237,7 @@ flowchart TB
         Browser["Browser / CLI"]
     end
     subgraph Server["Server / Container"]
-        App["Arthor Agent\n(FastAPI)"]
+        App["DocSentinel\n(FastAPI)"]
         Chroma["Chroma\n(vector store)"]
     end
     subgraph External["External"]
@@ -274,4 +274,4 @@ See [docs/05-deployment-runbook.md](./docs/05-deployment-runbook.md) for environ
 
 ---
 
-*This architecture document is part of the [Arthor Agent](https://github.com/arthurpanhku/Arthor-Agent) open-source project.*
+*This architecture document is part of the [DocSentinel](https://github.com/arthurpanhku/DocSentinel) open-source project.*

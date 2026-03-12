@@ -40,8 +40,8 @@ Suitable for Development, PoC, or Small Teams. Includes API, Dashboard, and opti
 
 ```bash
 # Clone repo
-git clone https://github.com/arthurpanhku/Arthor-Agent.git
-cd Arthor-Agent
+git clone https://github.com/arthurpanhku/DocSentinel.git
+cd DocSentinel
 
 # Run script
 chmod +x deploy.sh

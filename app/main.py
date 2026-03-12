@@ -1,5 +1,5 @@
 """
-Arthor Agent — FastAPI application.
+DocSentinel — FastAPI application.
 PRD §5; docs/01-architecture-and-tech-stack.md.
 """
 
@@ -35,7 +35,7 @@ async def _kb_auto_sync_loop():
 
 
 app = FastAPI(
-    title="Arthor Agent API",
+    title="DocSentinel API",
     version="0.3.0",
     description="Automated Security Assessment with LLMs & RAG",
 )
@@ -62,7 +62,7 @@ app.mount("/docs", StaticFiles(directory="docs", html=True), name="docs")
 @app.get("/")
 async def root():
     return {
-        "service": "Arthor Agent",
+        "service": "DocSentinel",
         "api_docs": "/api-docs",
         "demo": "/docs/demo.html",
         "health": "/health",

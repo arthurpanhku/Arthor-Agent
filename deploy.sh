@@ -6,7 +6,7 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}=== Arthor Agent Deployment Script ===${NC}"
+echo -e "${BLUE}=== DocSentinel Deployment Script ===${NC}"
 
 # Check for Docker
 if ! command -v docker &> /dev/null; then

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Arthor Agent — 30s demo script (run with API at http://localhost:8000)
+# DocSentinel — 30s demo script (run with API at http://localhost:8000)
 # Usage: ./scripts/demo.sh   or   bash scripts/demo.sh
 
 set -e
@@ -12,7 +12,7 @@ if [ ! -f "$SAMPLE" ]; then
   exit 1
 fi
 
-echo "=== Arthor Agent demo ==="
+echo "=== DocSentinel demo ==="
 echo "1. Submitting assessment (file: $SAMPLE)..."
 RESP=$(curl -s -X POST "$API/assessments" -F "files=@$SAMPLE" -F "scenario_id=default")
 TASK_ID=$(echo "$RESP" | python3 -c "import sys,json; print(json.load(sys.stdin).get('task_id',''))")

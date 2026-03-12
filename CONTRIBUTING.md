@@ -1,8 +1,8 @@
-# Contributing to Arthor Agent | 参与贡献
+# Contributing to DocSentinel | 参与贡献
 
 Thank you for your interest in contributing. We welcome issues, pull requests, and feedback.
 
-感谢你对 Arthor Agent 的关注。我们欢迎提交 Issue、Pull Request 以及任何反馈。
+感谢你对 DocSentinel 的关注。我们欢迎提交 Issue、Pull Request 以及任何反馈。
 
 ---
 
@@ -10,7 +10,7 @@ Thank you for your interest in contributing. We welcome issues, pull requests, a
 
 ### How to contribute
 
-1.  **Report bugs or suggest features**: Open a new [Issue](https://github.com/arthurpanhku/Arthor-Agent/issues) using the Bug report or Feature request template; include steps to reproduce or use case when possible.
+1.  **Report bugs or suggest features**: Open a new [Issue](https://github.com/arthurpanhku/DocSentinel/issues) using the Bug report or Feature request template; include steps to reproduce or use case when possible.
 2.  **Submit code**: Fork the repo, create a branch, make your changes, and open a Pull Request to `main`. See "Development setup" and "Commit guidelines" below.
 3.  **Docs and examples**: Improvements to README, SPEC, code comments, or examples are welcome.
 
@@ -28,7 +28,7 @@ Thank you for your interest in contributing. We welcome issues, pull requests, a
     To test the MCP server, install in editable mode:
     ```bash
     pip install -e .
-    arthor-mcp --help
+    docsentinel-mcp --help
     ```
 
 ### Running tests
@@ -52,7 +52,7 @@ make lint                   # Check code style
 ### Branching and releases
 
 -   The main development branch is **`main`**.
--   Releases are made via **Git tags** (e.g. `v0.1.0`) and [GitHub Releases](https://github.com/arthurpanhku/Arthor-Agent/releases); release notes are in [CHANGELOG.md](CHANGELOG.md).
+-   Releases are made via **Git tags** (e.g. `v0.1.0`) and [GitHub Releases](https://github.com/arthurpanhku/DocSentinel/releases); release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
@@ -60,7 +60,7 @@ make lint                   # Check code style
 
 ### 如何参与
 
-1.  **报告问题或建议功能**：在 [Issues](https://github.com/arthurpanhku/Arthor-Agent/issues) 中新建 Bug 报告或功能建议，使用模板并尽量提供复现步骤或使用场景。
+1.  **报告问题或建议功能**：在 [Issues](https://github.com/arthurpanhku/DocSentinel/issues) 中新建 Bug 报告或功能建议，使用模板并尽量提供复现步骤或使用场景。
 2.  **提交代码**：Fork 本仓库，在本地创建分支，修改后提交 PR 到 `main`。请先阅读下方「开发环境」与「提交规范」。
 3.  **文档与示例**：改进 README、SPEC、注释或补充示例同样欢迎。
 
@@ -75,10 +75,10 @@ make lint                   # Check code style
     pre-commit install          # 安装 Git 提交钩子
     ```
 -   **MCP (Model Context Protocol) 开发**：
-    调试 MCP Server 时，建议使用 `arthor-mcp` 命令行工具：
+    调试 MCP Server 时，建议使用 `docsentinel-mcp` 命令行工具：
     ```bash
     pip install -e .            # 以编辑模式安装当前包
-    arthor-mcp --help           # 验证安装
+    docsentinel-mcp --help           # 验证安装
     ```
 
 ### 运行测试
@@ -102,4 +102,4 @@ make lint                   # 检查代码风格
 ### 分支与发布
 
 -   主开发分支为 **`main`**。
--   发版通过 **Git tag**（如 `v0.1.0`）与 [GitHub Releases](https://github.com/arthurpanhku/Arthor-Agent/releases) 完成；版本说明见 [CHANGELOG.md](CHANGELOG.md)。
+-   发版通过 **Git tag**（如 `v0.1.0`）与 [GitHub Releases](https://github.com/arthurpanhku/DocSentinel/releases) 完成；版本说明见 [CHANGELOG.md](CHANGELOG.md)。

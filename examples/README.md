@@ -1,7 +1,7 @@
 # Example files | 示例文件
 
-Sample documents for testing Arthor Agent locally.  
-用于本地测试 Arthor Agent 的示例文档。
+Sample documents for testing DocSentinel locally.  
+用于本地测试 DocSentinel 的示例文档。
 
 | File | Use |
 |------|-----|

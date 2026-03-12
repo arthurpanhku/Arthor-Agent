@@ -1,13 +1,13 @@
-# Arthor Agent — REST API 规范 | API Specification (OpenAPI 3.x)
+# DocSentinel — REST API 规范 | API Specification (OpenAPI 3.x)
 # 本文件为模板，请随实现补充完整并与 FastAPI 导出或手写保持一致。
 # This file is a template; complete and keep in sync with FastAPI or hand-written spec.
 
 openapi: 3.0.3
 info:
-  title: Arthor Agent API
+  title: DocSentinel API
   description: |
-    Arthor Agent 的 REST API。
-    REST API for Arthor Agent (assessment, knowledge base, health).
+    DocSentinel 的 REST API。
+    REST API for DocSentinel (assessment, knowledge base, health).
   version: 0.1.0
   contact:
     name: PAN CHAO

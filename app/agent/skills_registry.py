@@ -2,7 +2,6 @@
 Built-in skills registry for security assessment personas.
 """
 
-from typing import Optional
 
 from app.models.skill import Skill
 
@@ -84,7 +83,7 @@ def get_builtin_skills() -> list[Skill]:
     return BUILTIN_SKILLS
 
 
-def get_builtin_skill(skill_id: str) -> Optional[Skill]:
+def get_builtin_skill(skill_id: str) -> Skill | None:
     for s in BUILTIN_SKILLS:
         if s.id == skill_id:
             return s

@@ -7,7 +7,7 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}=== Arthor Agent Integration Test Suite ===${NC}"
+echo -e "${BLUE}=== DocSentinel Integration Test Suite ===${NC}"
 
 # 1. Environment Check
 echo -e "${BLUE}[1/3] Checking Environment...${NC}"
